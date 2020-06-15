@@ -6,13 +6,17 @@ import { ShapesType } from '../types';
 type PropsType = {
   countShapes: number
   shapes: Array<ShapesType>
-  changeSelect: (i: number) => void
-  changeShapes: (newShapes: Array<ShapesType>, count: number) => void
+  dispatch: any
 }
 
 const Shapes = (props: PropsType): JSX.Element => {
   const selectShape = (shapeIndex: number): void => {
-    props.changeSelect(shapeIndex)
+    props.dispatch({
+      type: 'CHANGE-SELECT',
+      data: {
+        i: shapeIndex
+      }
+    })
   }
 
   
@@ -23,16 +27,16 @@ const Shapes = (props: PropsType): JSX.Element => {
           shapes={props.shapes}
           data={row}
           index={index}
-          selectShape={(shapeIndex: number) => selectShape(shapeIndex)}
-          changeShapes={(newShapes: Array<ShapesType>, count: number) => props.changeShapes(newShapes, count)}/>
+          selectShape={selectShape}
+          dispatch={props.dispatch}/>
       }
       if (row.type === 'triangle') {
         return <TriangleShape 
           shapes={props.shapes}
           data={row}
           index={index}
-          selectShape={(shapeIndex: number) => selectShape(shapeIndex)}
-          changeShapes={(newShapes: Array<ShapesType>, count: number) => props.changeShapes(newShapes, count)}/>
+          selectShape={selectShape}
+          dispatch={props.dispatch}/>
       }
     })
     return rows

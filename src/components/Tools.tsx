@@ -5,9 +5,9 @@ import { ShapesType } from '../types';
 
 type PropsType = {
   countShapes: number
-  changeShapes: (newShapes: Array<ShapesType>, count: number) => void
   shapes: Array<ShapesType>
   selectedShape: number | null
+  dispatch: any
 }
 
 const Tools = (props: PropsType): JSX.Element => {
@@ -39,7 +39,13 @@ const Tools = (props: PropsType): JSX.Element => {
       let newShapes = props.shapes.slice();
       newShapes[props.selectedShape].bgcolor = newFillColor;
       newShapes[props.selectedShape].stroke = newStrokeColor;
-      props.changeShapes(newShapes, props.countShapes);
+      props.dispatch({
+        type: 'CHANGE-SHAPES',
+        data: {
+          newShapes: newShapes,
+          count: newShapes.length
+        }
+      })
     }
   }
 
@@ -61,7 +67,13 @@ const Tools = (props: PropsType): JSX.Element => {
       }
     ])
     debugger
-    props.changeShapes(newShapes, props.countShapes + 1);
+    props.dispatch({
+      type: 'CHANGE-SHAPES',
+      data: {
+        newShapes: newShapes,
+        count: newShapes.length
+      }
+    })
   }
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShapesType, StoreType, StoreStateType } from '../types';
+import { ShapesType, StoreType, StoreStateType, DispatchActionType } from '../types';
 debugger
 type CallSubsType = {
   state?: any;
@@ -83,6 +83,17 @@ let store: StoreType = {
     })
     this._state.shapes = newShapes;
     this._callSubscriber(this._state)
+  },
+  dispatch(action: DispatchActionType) {
+    if (action.type === 'CHANGE-SHAPES') {
+      this.changeShapes(action.data.newShapes, action.data.count);
+    }
+    if (action.type === 'CHANGE-SELECT') {
+      this.changeSelect(action.data.i);
+    }
+    if (action.type === 'DISCHARGE-SELECT') {
+      this.dischargeSelect();
+    }
   }
 }
 // window.store = store;

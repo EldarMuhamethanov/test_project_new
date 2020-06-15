@@ -37,4 +37,10 @@ export type StoreType = {
   changeShapes: (newShapes: Array<ShapesType>, count: number) => void,
   dischargeSelect: () => void,
   changeSelect: (i: number) => void,
+  dispatch: (action: DispatchActionType) => void,
+}
+
+export type DispatchActionType = {
+  type: string,
+  data?: any
 }

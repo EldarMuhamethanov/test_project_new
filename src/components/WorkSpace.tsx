@@ -5,24 +5,30 @@ import { ShapesType } from '../types';
 type PropsType = {
   countShapes: number,
   shapes: Array<ShapesType>,
-  selectedShape: number|null,
-  changeSelect:(i: number) => void,
-  dischargeSelect: () => void,
-  changeShapes: (newShapes: Array<ShapesType>, count: number) => void,
+  selectedShape: number | null,
+  dispatch: any,
 }
 
 const WorkSpace = (props: PropsType): JSX.Element => {
 
   const clickOnScreen = (e: React.MouseEvent): void => {
     e.preventDefault();
-    props.dischargeSelect();
+    props.dispatch({
+      type: 'DISCHARGE-SELECT',
+    })
   }
 
   const deleteShape = (e: any): void => {
     if (e.keyCode === 46 && props.selectedShape !== null) {
       let newShapes: Array<ShapesType> = props.shapes.slice();
       newShapes.splice(props.selectedShape, 1);
-      props.changeShapes(newShapes, newShapes.length)
+      props.dispatch({
+        type: 'CHANGE-SHAPES',
+        data: {
+          newShapes: newShapes,
+          count: newShapes.length
+        }
+      })
     }
   }
   useEffect(() => {
@@ -36,8 +42,7 @@ const WorkSpace = (props: PropsType): JSX.Element => {
       <Shapes 
         countShapes={props.countShapes}
         shapes={props.shapes}
-        changeSelect={(i: number) => props.changeSelect(i)}
-        changeShapes={(newShapes: Array<ShapesType>, count: number) => props.changeShapes(newShapes, count)}
+        dispatch={props.dispatch}
       />
     </div>
     )

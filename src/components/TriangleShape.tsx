@@ -7,7 +7,7 @@ type PropsType = {
   data: ShapesType
   index: number
   selectShape: (shapeIndex: number) => void
-  changeShapes: (newShapes: Array<ShapesType>, count: number) => void
+  dispatch: any
 }
 
 const TriangleShape = (props: PropsType): JSX.Element => {
@@ -44,9 +44,6 @@ const TriangleShape = (props: PropsType): JSX.Element => {
       refShape.current.style.left = e.pageX - windowWidth * 0.25 - shapeWidth / 2;
       refShape.current.style.top = e.pageY - shapeHeight / 2;
     }
-
-    // refShape.current.style.left = e.pageX - window.innerWidth * 0.25 - row.width/2;
-    // refShape.current.style.top = e.pageY - row.height / 2;
   }
 
   const mouseUp = (): void => {
@@ -55,7 +52,13 @@ const TriangleShape = (props: PropsType): JSX.Element => {
     let newShapes: Array<ShapesType> = props.shapes.slice();
     newShapes[index].left = getComputedStyle(refShape.current).left;
     newShapes[index].top = getComputedStyle(refShape.current).top;
-    props.changeShapes(newShapes, newShapes.length)
+    props.dispatch({
+      type: 'CHANGE-SHAPES',
+      data: {
+        newShapes: newShapes,
+        count: newShapes.length
+      }
+    })
   }
   
   const mouseDown = (): void => {

@@ -5,8 +5,8 @@ type PropsType = {
   shapes: Array<ShapesType>
   data: ShapesType
   index: number
+  dispatch: any
   selectShape: (shapeIndex: number) => void
-  changeShapes: (newShapes: Array<ShapesType>, count: number) => void
 }
 
 const RectShape = (props: PropsType): JSX.Element => {
@@ -52,7 +52,13 @@ const RectShape = (props: PropsType): JSX.Element => {
     let newShapes: Array<ShapesType> = props.shapes.slice();
     newShapes[index].left = getComputedStyle(refShape.current).left;
     newShapes[index].top = getComputedStyle(refShape.current).top;
-    props.changeShapes(newShapes, newShapes.length)
+    props.dispatch({
+      type: 'CHANGE-SHAPES',
+      data: {
+        newShapes: newShapes,
+        count: newShapes.length
+      }
+    })
   }
   
   const mouseDown = (): void => {
