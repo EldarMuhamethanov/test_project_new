@@ -44,6 +44,7 @@ const Tools = (props: PropsType): JSX.Element => {
   }
 
   const addShape = (currType: string): void => {
+    debugger
     let newShapes: Array<ShapesType> = props.shapes.slice();
     const width: number = 150;
     const height: number = 100;
@@ -59,6 +60,7 @@ const Tools = (props: PropsType): JSX.Element => {
         height: height,
       }
     ])
+    debugger
     props.changeShapes(newShapes, props.countShapes + 1);
   }
 

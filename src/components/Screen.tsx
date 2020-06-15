@@ -1,88 +1,95 @@
 import React, {useState} from 'react';
 import Tools from './Tools';
 import WorkSpace from './WorkSpace';
-import { ShapesType } from '../types';
+import { ShapesType, StoreStateType } from '../types';
+import store from './../redux/state';
 
-const Screen = () => {
-  let [count, setCount] = useState<number>(0);
-  let [shapes, setShapes] = useState<Array<ShapesType>>([]);
-  let [selectedShape, setSelectedShape] = useState<number | null>(null);
+type PropsType = {
+  state: StoreStateType,
+  changeShapes: (newShapes: Array<ShapesType>, count: number) => void,
+  changeSelect: (i: number) => void,
+  dischargeSelect: () => void
+}
 
-  const dischargeSelect = (): void => {
-    let newShapes : Array<ShapesType> = shapes.slice();
-    newShapes = newShapes.map((row, index): ShapesType => {
-      return {
-        left: row.left,
-        top: row.top,
-        isSelected: false,
-        type: row.type,
-        bgcolor: row.bgcolor,
-        stroke: row.stroke,
-        width: row.width,
-        height: row.height,
-      }
-    })
-    setShapes(newShapes);
-    setSelectedShape(null);
-  }
+const Screen = (props: PropsType) => {
+  // let [count, setCount] = useState<number>(0);
+  // let [shapes, setShapes] = useState<Array<ShapesType>>([]);
+  // let [selectedShape, setSelectedShape] = useState<number | null>(null);
 
-  const changeSelect = (i: number): void => {
-    let newShapes : Array<ShapesType> = shapes.slice();
-    newShapes = newShapes.map((row, index): ShapesType => {
-      if (index === i) {
-        setSelectedShape(index);
-        return(
-          {
-            left: row.left,
-            top: row.top,
-            isSelected: true,
-            type: row.type,
-            bgcolor: row.bgcolor,
-            stroke: row.stroke,
-            width: row.width,
-            height: row.height,
-          }
-        )
+  // const dischargeSelect = (): void => {
+  //   let newShapes : Array<ShapesType> = shapes.slice();
+  //   newShapes = newShapes.map((row, index): ShapesType => {
+  //     return {
+  //       left: row.left,
+  //       top: row.top,
+  //       isSelected: false,
+  //       type: row.type,
+  //       bgcolor: row.bgcolor,
+  //       stroke: row.stroke,
+  //       width: row.width,
+  //       height: row.height,
+  //     }
+  //   })
+  //   setShapes(newShapes);
+  //   setSelectedShape(null);
+  // }
+
+  // const changeSelect = (i: number): void => {
+  //   let newShapes : Array<ShapesType> = shapes.slice();
+  //   newShapes = newShapes.map((row, index): ShapesType => {
+  //     if (index === i) {
+  //       setSelectedShape(index);
+  //       return(
+  //         {
+  //           left: row.left,
+  //           top: row.top,
+  //           isSelected: true,
+  //           type: row.type,
+  //           bgcolor: row.bgcolor,
+  //           stroke: row.stroke,
+  //           width: row.width,
+  //           height: row.height,
+  //         }
+  //       )
         
-      } else {
-        return (
-          {
-            left: row.left,
-            top: row.top,
-            isSelected: false,
-            type: row.type,
-            bgcolor: row.bgcolor,
-            stroke: row.stroke,
-            width: row.width,
-            height: row.height,
-          }
-        )
-      }
-    })
-    setShapes(newShapes);
-  }
+  //     } else {
+  //       return (
+  //         {
+  //           left: row.left,
+  //           top: row.top,
+  //           isSelected: false,
+  //           type: row.type,
+  //           bgcolor: row.bgcolor,
+  //           stroke: row.stroke,
+  //           width: row.width,
+  //           height: row.height,
+  //         }
+  //       )
+  //     }
+  //   })
+  //   setShapes(newShapes);
+  // }
 
-  const changeShapes = (newShapes: Array<ShapesType>, count: number): void => {
-    setShapes(newShapes);
-    setCount(count);
-  } 
-
-
+  // const changeShapes = (newShapes: Array<ShapesType>, count: number): void => {
+  //   setShapes(newShapes);
+  //   setCount(count);
+  // } 
+  debugger
   return (
     <div className="screen">
       <Tools 
-        countShapes={count}
-        changeShapes={(newShapes: Array<ShapesType>, count: number) => changeShapes(newShapes, count)}
-        shapes={shapes}
-        selectedShape={selectedShape}
+        countShapes={props.state.count}
+        changeShapes={props.changeShapes}
+        shapes={props.state.shapes}
+        selectedShape={props.state.selectedShape}
       />
       <WorkSpace 
-        countShapes={count}
-        shapes={shapes}
-        selectedShape={selectedShape}
-        changeSelect={(i: number) => changeSelect(i)}
-        dischargeSelect={() => dischargeSelect()}
-        changeShapes={(newShapes: Array<ShapesType>, count: number) => changeShapes(newShapes, count)}
+        countShapes={props.state.count}
+        shapes={props.state.shapes}
+        selectedShape={props.state.selectedShape}
+        changeSelect={props.changeSelect}
+        dischargeSelect={props.dischargeSelect}
+        changeShapes={props.changeShapes}
       />
     </div>
   );
