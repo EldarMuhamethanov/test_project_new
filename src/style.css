@@ -1,0 +1,64 @@
+body
+{
+  margin: 0;
+}
+.root
+{
+  width: 100%;
+  height: 100vh;
+  /* border: 2px solid red; */
+  /* display: flex; */
+}
+.screen
+{
+  display: flex;
+}
+.left_part 
+{
+  width: 25%;
+  height: 100vh;
+  box-sizing: border-box;
+  /* border: 2px solid red; */
+  background-color: #ccc;
+}
+.right_part
+{
+  width: 75%;
+  height: 100vh;
+  background-color: #EFEFEF;
+  position: relative;
+}
+.rect
+{
+  position: absolute;
+  background-color: red;
+  height: 80px;
+  width: 150px;
+}
+.shape_button:hover,
+.color_picker:hover
+{
+  cursor: pointer;
+}
+.shape
+{
+  position: absolute;
+}
+polygon:hover,
+rect:hover
+{
+  cursor: pointer;
+}
+
+.selected_shape
+{
+  border: 2px dashed red;
+}
+.grab:hover
+{
+  cursor: grab;
+}
+.grabbing:hover
+{
+  cursor: grabbing;
+}
