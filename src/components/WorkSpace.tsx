@@ -14,7 +14,6 @@ const WorkSpace = (props: PropsType): JSX.Element => {
 
   const clickOnScreen = (e: React.MouseEvent): void => {
     e.preventDefault();
-    debugger
     props.dispatch(dischargeSelectActionCreator());
     props.dispatch(switchDisableFillColorPickerActionCreator(true));
     props.dispatch(switchDisableStrokeColorPickerActionCreator(true));

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { ShapesType, StoreType, StoreStateType, DispatchActionType } from '../types';
+import workspaceReducer from './workspace-reducer';
+import toolbarReducer from './toolbar-reducer';
 debugger
 
 const CHANGE_SHAPES = 'CHANGE-SHAPES';
@@ -111,27 +113,9 @@ let store: StoreType = {
     this._callSubscriber(this._state);
   },
   dispatch(action: DispatchActionType) {
-    if (action.type === CHANGE_SHAPES) {
-      this._changeShapes(action.data.newShapes, action.data.count);
-    }
-    if (action.type === CHANGE_SELECT) {
-      this._changeSelect(action.data.indexShape);
-    }
-    if (action.type === DISCHARGE_SELECT) {
-      this._dischargeSelect();
-    }
-    if (action.type === CHANGE_FILL_COLORPICKER_COLOR) {
-      this._changeFillColorPickerColor(action.data.newColor);
-    }
-    if (action.type === CHANGE_STROKE_COLORPICKER_COLOR) {
-      this._changeStrokeColorPickerColor(action.data.newColor);
-    }
-    if (action.type === SWITCH_DISABLE_FILL_COLORPICKER) {
-      this._switchDisableFillColorPicker(action.data.isDisabled);
-    }
-    if (action.type === SWITCH_DISABLE_STROKE_COLORPICKER) {
-      this._switchDisableStrokeColorPicker(action.data.isDisabled);
-    }
+    this._state.workSpace = workspaceReducer(this._state.workSpace, action);
+    this._state.toolbar = toolbarReducer(this._state.toolbar, action);
+    this._callSubscriber(this._state);
   }
 }
 
