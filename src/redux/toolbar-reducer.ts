@@ -1,4 +1,4 @@
-import { StoreStateType, DispatchActionType } from "../types";
+import { DispatchActionType } from "../types";
 
 const CHANGE_FILL_COLORPICKER_COLOR = 'CHANGE-FILL-COLORPICKER-COLOR';
 const CHANGE_STROKE_COLORPICKER_COLOR = 'CHANGE-STROKE-COLORPICKER-COLOR'; 
@@ -13,19 +13,59 @@ type ToolbarStateType = {
 }
 
 export const toolbarReducer = (state: ToolbarStateType, action: DispatchActionType): ToolbarStateType => {
-  if (action.type === CHANGE_FILL_COLORPICKER_COLOR) {
-    state.fillColorPickerColor = action.data.newColor;
+  switch (action.type) {
+    case CHANGE_FILL_COLORPICKER_COLOR:
+      state.fillColorPickerColor = action.data.newColor;
+      return state;
+    case CHANGE_STROKE_COLORPICKER_COLOR:
+      state.strokeColorPickerColor = action.data.newColor;
+      return state;
+    case SWITCH_DISABLE_FILL_COLORPICKER:
+      state.isDisableFillColorPicker = action.data.isDisabled;
+      return state;
+    case SWITCH_DISABLE_STROKE_COLORPICKER:
+      state.isDisableStrokeColorPicker = action.data.isDisabled;
+      return state
+    default:
+      return state
   }
-  if (action.type === CHANGE_STROKE_COLORPICKER_COLOR) {
-    state.strokeColorPickerColor = action.data.newColor;
+}
+
+export const changeFillColorPickerColorActionCreator = (newColor: string): DispatchActionType => {
+  debugger
+  return {
+    type: CHANGE_FILL_COLORPICKER_COLOR,
+    data: {
+      newColor: newColor
+    }
   }
-  if (action.type === SWITCH_DISABLE_FILL_COLORPICKER) {
-    state.isDisableFillColorPicker = action.data.isDisabled;
+}
+export const changeStrokeColorPickerColorActionCreator = (newColor: string): DispatchActionType => {
+  debugger
+  return {
+    type: CHANGE_STROKE_COLORPICKER_COLOR,
+    data: {
+      newColor: newColor
+    }
   }
-  if (action.type === SWITCH_DISABLE_STROKE_COLORPICKER) {
-    state.isDisableStrokeColorPicker = action.data.isDisabled;
+}
+export const switchDisableFillColorPickerActionCreator = (isDisabled: boolean): DispatchActionType => {
+  debugger
+  return {
+    type: SWITCH_DISABLE_FILL_COLORPICKER,
+    data: {
+      isDisabled: isDisabled
+    }
   }
-  return state;
+}
+export const switchDisableStrokeColorPickerActionCreator = (isDisabled: boolean): DispatchActionType => {
+  debugger
+  return {
+    type: SWITCH_DISABLE_STROKE_COLORPICKER,
+    data: {
+      isDisabled: isDisabled
+    }
+  }
 }
 
 export default toolbarReducer;

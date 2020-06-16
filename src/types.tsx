@@ -38,13 +38,6 @@ export type StoreType = {
   getState: () => StoreStateType,
   _callSubscriber: (state: any) => void,
   subscribe: (observer: any) => void,
-  _changeShapes: (newShapes: Array<ShapesType>, count: number) => void,
-  _dischargeSelect: () => void,
-  _changeSelect: (indexShape: number) => void,
-  _changeFillColorPickerColor: (newColor: string) => void,
-  _changeStrokeColorPickerColor: (newColor: string) => void,
-  _switchDisableFillColorPicker: (isDisabled: boolean) => void,
-  _switchDisableStrokeColorPicker: (isDisabled: boolean) => void,
   dispatch: (action: DispatchActionType) => void,
 }
 

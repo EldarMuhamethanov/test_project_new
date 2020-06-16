@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { ShapesType, ViewBoxType, StyleShapeType } from '../types';
-import { changeShapesActionCreator } from '../redux/state';
+import { changeShapesActionCreator } from '../redux/workspace-reducer';
 
 type PropsType = {
   shapes: Array<ShapesType>

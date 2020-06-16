@@ -1,7 +1,8 @@
-import React, { JSXElementConstructor, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Shapes from './Shapes';
 import { ShapesType } from '../types';
-import { changeShapesActionCreator, dischargeSelectActionCreator, switchDisableFillColorPickerActionCreator, switchDisableStrokeColorPickerActionCreator } from '../redux/state';
+import { changeShapesActionCreator, dischargeSelectActionCreator } from '../redux/workspace-reducer';
+import { switchDisableFillColorPickerActionCreator, switchDisableStrokeColorPickerActionCreator } from '../redux/toolbar-reducer';
 
 type PropsType = {
   countShapes: number,
@@ -37,6 +38,7 @@ const WorkSpace = (props: PropsType): JSX.Element => {
       <Shapes 
         countShapes={props.countShapes}
         shapes={props.shapes}
+        selectedShape={props.selectedShape}
         dispatch={props.dispatch}
       />
     </div>

@@ -1,8 +1,10 @@
-import React, { useRef, useState, useEffect} from 'react';
+import React, { useRef } from 'react';
 import rectangle from './../images/Rectangle2.png';
 import triangle from './../images/Polygon1.png';
 import { ShapesType } from '../types';
-import { changeShapesActionCreator, changeFillColorPickerColorActionCreator, changeStrokeColorPickerColorActionCreator } from '../redux/state';
+//import { changeShapesActionCreator, changeFillColorPickerColorActionCreator, changeStrokeColorPickerColorActionCreator } from '../redux/state';
+import { changeShapesActionCreator } from '../redux/workspace-reducer';
+import { changeStrokeColorPickerColorActionCreator, changeFillColorPickerColorActionCreator } from '../redux/toolbar-reducer';
 
 type PropsType = {
   toolbarState: any, 
@@ -16,22 +18,6 @@ const Tools = (props: PropsType): JSX.Element => {
 
   const fillColorPicker: any = useRef(null);
   const strokeColorPicker: any = useRef(null);
-  // let [fillColorPickerColor, setColorPickerColor] = useState("#000000");
-  // let [isDisableFillColorPicker, setIsDisableFillColorPicker] = useState(true);
-  // let [strokeColorPickerColor, setStrokeColorPickerColor] = useState("#000000");
-  // let [isDisableStrokeColorPicker, setIsDisableStrokeColorPicker] = useState(true);
-
-  // useEffect((): void => {
-  //   if (props.selectedShape !== null) {
-  //     setIsDisableFillColorPicker(false);
-  //     setIsDisableStrokeColorPicker(false);
-  //     setColorPickerColor(props.shapes[props.selectedShape].bgcolor)
-  //     setStrokeColorPickerColor(props.shapes[props.selectedShape].stroke)
-  //   } else {
-  //     setIsDisableFillColorPicker(true);
-  //     setIsDisableStrokeColorPicker(true);
-  //   }
-  // }, [props.selectedShape]);
 
   const changeShapeColor = (): void => {
     if (props.selectedShape !== null) {

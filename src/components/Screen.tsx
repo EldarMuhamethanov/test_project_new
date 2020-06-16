@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Tools from './Tools';
 import WorkSpace from './WorkSpace';
-import { ShapesType, StoreStateType } from '../types';
+import { StoreStateType } from '../types';
 
 type PropsType = {
   state: StoreStateType,
