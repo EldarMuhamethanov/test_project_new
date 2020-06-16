@@ -12,15 +12,16 @@ const Screen = (props: PropsType) => {
   return (
     <div className="screen">
       <Tools 
-        countShapes={props.state.count}
-        shapes={props.state.shapes}
+        toolbarState={props.state.toolbar}
+        countShapes={props.state.workSpace.count}
+        shapes={props.state.workSpace.shapes}
         dispatch={props.dispatch}
-        selectedShape={props.state.selectedShape}
+        selectedShape={props.state.workSpace.selectedShape}
       />
       <WorkSpace 
-        countShapes={props.state.count}
-        shapes={props.state.shapes}
-        selectedShape={props.state.selectedShape}
+        countShapes={props.state.workSpace.count}
+        shapes={props.state.workSpace.shapes}
+        selectedShape={props.state.workSpace.selectedShape}
         dispatch={props.dispatch}
       />
     </div>

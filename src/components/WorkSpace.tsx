@@ -1,6 +1,7 @@
 import React, { JSXElementConstructor, useEffect } from 'react';
 import Shapes from './Shapes';
 import { ShapesType } from '../types';
+import { changeShapesActionCreator, dischargeSelectActionCreator, switchDisableFillColorPickerActionCreator, switchDisableStrokeColorPickerActionCreator } from '../redux/state';
 
 type PropsType = {
   countShapes: number,
@@ -13,22 +14,17 @@ const WorkSpace = (props: PropsType): JSX.Element => {
 
   const clickOnScreen = (e: React.MouseEvent): void => {
     e.preventDefault();
-    props.dispatch({
-      type: 'DISCHARGE-SELECT',
-    })
+    debugger
+    props.dispatch(dischargeSelectActionCreator());
+    props.dispatch(switchDisableFillColorPickerActionCreator(true));
+    props.dispatch(switchDisableStrokeColorPickerActionCreator(true));
   }
 
   const deleteShape = (e: any): void => {
     if (e.keyCode === 46 && props.selectedShape !== null) {
       let newShapes: Array<ShapesType> = props.shapes.slice();
       newShapes.splice(props.selectedShape, 1);
-      props.dispatch({
-        type: 'CHANGE-SHAPES',
-        data: {
-          newShapes: newShapes,
-          count: newShapes.length
-        }
-      })
+      props.dispatch(changeShapesActionCreator(newShapes, newShapes.length))
     }
   }
   useEffect(() => {

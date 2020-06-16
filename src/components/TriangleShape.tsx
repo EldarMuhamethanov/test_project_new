@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import { ShapesType, ViewBoxType, StyleShapeType } from '../types';
+import { changeShapesActionCreator } from '../redux/state';
 
 
 type PropsType = {
@@ -52,13 +53,7 @@ const TriangleShape = (props: PropsType): JSX.Element => {
     let newShapes: Array<ShapesType> = props.shapes.slice();
     newShapes[index].left = getComputedStyle(refShape.current).left;
     newShapes[index].top = getComputedStyle(refShape.current).top;
-    props.dispatch({
-      type: 'CHANGE-SHAPES',
-      data: {
-        newShapes: newShapes,
-        count: newShapes.length
-      }
-    })
+    props.dispatch(changeShapesActionCreator(newShapes, newShapes.length))
   }
   
   const mouseDown = (): void => {

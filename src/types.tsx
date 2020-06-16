@@ -1,4 +1,4 @@
-import React from 'react';
+//import React from 'react';
 
 export type ShapesType = {
   left: string,
@@ -19,14 +19,18 @@ export type StyleShapeType = {
 }
 
 export type StoreStateType = {
-  count: number,
-  shapes: Array<ShapesType>,
-  selectedShape: number | null,
-  isAnySelect: boolean,
-  fillColorPickerColor: string,
-  isDisableFillColorPicker: boolean,
-  strokeColorPickerColor: string,
-  isDisableStrokeColorPicker: boolean,
+  workSpace: {
+    count: number,
+    shapes: Array<ShapesType>,
+    selectedShape: number | null,
+    isAnySelect: boolean,
+  }
+  toolbar: {
+    fillColorPickerColor: string,
+    isDisableFillColorPicker: boolean,
+    strokeColorPickerColor: string,
+    isDisableStrokeColorPicker: boolean,
+  }
 }
 
 export type StoreType = {
@@ -34,9 +38,13 @@ export type StoreType = {
   getState: () => StoreStateType,
   _callSubscriber: (state: any) => void,
   subscribe: (observer: any) => void,
-  changeShapes: (newShapes: Array<ShapesType>, count: number) => void,
-  dischargeSelect: () => void,
-  changeSelect: (i: number) => void,
+  _changeShapes: (newShapes: Array<ShapesType>, count: number) => void,
+  _dischargeSelect: () => void,
+  _changeSelect: (indexShape: number) => void,
+  _changeFillColorPickerColor: (newColor: string) => void,
+  _changeStrokeColorPickerColor: (newColor: string) => void,
+  _switchDisableFillColorPicker: (isDisabled: boolean) => void,
+  _switchDisableStrokeColorPicker: (isDisabled: boolean) => void,
   dispatch: (action: DispatchActionType) => void,
 }
 

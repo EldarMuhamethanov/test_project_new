@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import RectShape from './RectShape';
 import TriangleShape from './TriangleShape';
 import { ShapesType } from '../types';
+import { changeShapesActionCreator, changeSelectActionCreator, switchDisableFillColorPickerActionCreator, switchDisableStrokeColorPickerActionCreator } from '../redux/state';
 
 type PropsType = {
   countShapes: number
@@ -11,12 +12,9 @@ type PropsType = {
 
 const Shapes = (props: PropsType): JSX.Element => {
   const selectShape = (shapeIndex: number): void => {
-    props.dispatch({
-      type: 'CHANGE-SELECT',
-      data: {
-        i: shapeIndex
-      }
-    })
+    props.dispatch(changeSelectActionCreator(shapeIndex))
+    props.dispatch(switchDisableFillColorPickerActionCreator(false));
+    props.dispatch(switchDisableStrokeColorPickerActionCreator(false));
   }
 
   

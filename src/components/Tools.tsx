@@ -2,8 +2,10 @@ import React, { useRef, useState, useEffect} from 'react';
 import rectangle from './../images/Rectangle2.png';
 import triangle from './../images/Polygon1.png';
 import { ShapesType } from '../types';
+import { changeShapesActionCreator, changeFillColorPickerColorActionCreator, changeStrokeColorPickerColorActionCreator } from '../redux/state';
 
 type PropsType = {
+  toolbarState: any, 
   countShapes: number
   shapes: Array<ShapesType>
   selectedShape: number | null
@@ -11,46 +13,40 @@ type PropsType = {
 }
 
 const Tools = (props: PropsType): JSX.Element => {
+
   const fillColorPicker: any = useRef(null);
   const strokeColorPicker: any = useRef(null);
-  let [fillColorPickerColor, setColorPickerColor] = useState("#000000");
-  let [isDisableFillColorPicker, setIsDisableFillColorPicker] = useState(true);
-  let [strokeColorPickerColor, setStrokeColorPickerColor] = useState("#000000");
-  let [isDisableStrokeColorPicker, setIsDisableStrokeColorPicker] = useState(true);
+  // let [fillColorPickerColor, setColorPickerColor] = useState("#000000");
+  // let [isDisableFillColorPicker, setIsDisableFillColorPicker] = useState(true);
+  // let [strokeColorPickerColor, setStrokeColorPickerColor] = useState("#000000");
+  // let [isDisableStrokeColorPicker, setIsDisableStrokeColorPicker] = useState(true);
 
-  useEffect((): void => {
-    if (props.selectedShape !== null) {
-      setIsDisableFillColorPicker(false);
-      setIsDisableStrokeColorPicker(false);
-      setColorPickerColor(props.shapes[props.selectedShape].bgcolor)
-      setStrokeColorPickerColor(props.shapes[props.selectedShape].stroke)
-    } else {
-      setIsDisableFillColorPicker(true);
-      setIsDisableStrokeColorPicker(true);
-    }
-  }, [props.selectedShape]);
+  // useEffect((): void => {
+  //   if (props.selectedShape !== null) {
+  //     setIsDisableFillColorPicker(false);
+  //     setIsDisableStrokeColorPicker(false);
+  //     setColorPickerColor(props.shapes[props.selectedShape].bgcolor)
+  //     setStrokeColorPickerColor(props.shapes[props.selectedShape].stroke)
+  //   } else {
+  //     setIsDisableFillColorPicker(true);
+  //     setIsDisableStrokeColorPicker(true);
+  //   }
+  // }, [props.selectedShape]);
 
   const changeShapeColor = (): void => {
     if (props.selectedShape !== null) {
       const newFillColor: any = fillColorPicker.current.value;
-      setColorPickerColor(newFillColor);
+      props.dispatch(changeFillColorPickerColorActionCreator(newFillColor));
       const newStrokeColor = strokeColorPicker.current.value;
-      setStrokeColorPickerColor(newStrokeColor);
+      props.dispatch(changeStrokeColorPickerColorActionCreator(newStrokeColor));
       let newShapes = props.shapes.slice();
       newShapes[props.selectedShape].bgcolor = newFillColor;
       newShapes[props.selectedShape].stroke = newStrokeColor;
-      props.dispatch({
-        type: 'CHANGE-SHAPES',
-        data: {
-          newShapes: newShapes,
-          count: newShapes.length
-        }
-      })
+      props.dispatch(changeShapesActionCreator(newShapes, newShapes.length))
     }
   }
 
   const addShape = (currType: string): void => {
-    debugger
     let newShapes: Array<ShapesType> = props.shapes.slice();
     const width: number = 150;
     const height: number = 100;
@@ -65,15 +61,8 @@ const Tools = (props: PropsType): JSX.Element => {
         width: width,
         height: height,
       }
-    ])
-    debugger
-    props.dispatch({
-      type: 'CHANGE-SHAPES',
-      data: {
-        newShapes: newShapes,
-        count: newShapes.length
-      }
-    })
+    ]);
+    props.dispatch(changeShapesActionCreator(newShapes, newShapes.length))
   }
 
   return (
@@ -91,11 +80,11 @@ const Tools = (props: PropsType): JSX.Element => {
         className="shape_button"
       />
       <div>
-        <input ref={fillColorPicker} disabled={isDisableFillColorPicker} type="color" id="fill_color" className="color_picker" value={fillColorPickerColor} onChange={() => changeShapeColor()}/>
+        <input ref={fillColorPicker} disabled={props.toolbarState.isDisableFillColorPicker} type="color" id="fill_color" className="color_picker" value={props.toolbarState.fillColorPickerColor} onChange={() => changeShapeColor()}/>
         <label>Fill</label>
       </div>
       <div>
-        <input ref={strokeColorPicker} disabled={isDisableStrokeColorPicker} type="color" id="stroke_color" className="color_picker" value={strokeColorPickerColor} onChange={() => changeShapeColor()}/>
+        <input ref={strokeColorPicker} disabled={props.toolbarState.isDisableStrokeColorPicker} type="color" id="stroke_color" className="color_picker" value={props.toolbarState.strokeColorPickerColor} onChange={() => changeShapeColor()}/>
         <label>Stroke</label>
       </div>
     </div>
