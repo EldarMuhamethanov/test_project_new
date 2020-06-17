@@ -53,25 +53,34 @@ const Tools = (props: PropsType): JSX.Element => {
 
   return (
     <div id="tool_panel" className="left_part">
-      <img 
-        src={rectangle}
-        onClick={() => addShape('rect')}
-        alt="rectangle"
-        className="shape_button"
-      />
-      <img 
-        src={triangle}
-        onClick={() => addShape('triangle')}
-        alt="triangle"
-        className="shape_button"
-      />
-      <div>
-        <input ref={fillColorPicker} disabled={props.toolbarState.isDisableFillColorPicker} type="color" id="fill_color" className="color_picker" value={props.toolbarState.fillColorPickerColor} onChange={() => changeShapeColor()}/>
-        <label>Fill</label>
+      <div className="select_new_shape">
+        <h2>Shapes</h2>
+        <div className="buttons_panel">
+          <img 
+            src={rectangle}
+            onClick={() => addShape('rect')}
+            alt="rectangle"
+            className="shape_button"
+          />
+          <img 
+            src={triangle}
+            onClick={() => addShape('triangle')}
+            alt="triangle"
+            className="shape_button"
+          />
+        </div>
       </div>
-      <div>
-        <input ref={strokeColorPicker} disabled={props.toolbarState.isDisableStrokeColorPicker} type="color" id="stroke_color" className="color_picker" value={props.toolbarState.strokeColorPickerColor} onChange={() => changeShapeColor()}/>
-        <label>Stroke</label>
+      
+      <div className="colorpickers">
+        <h2>Style</h2>
+        <div className="style_block">
+          <label>Fill</label>
+          <input ref={fillColorPicker} disabled={props.toolbarState.isDisableFillColorPicker} type="color" id="fill_color" className="color_picker" value={props.toolbarState.fillColorPickerColor} onChange={() => changeShapeColor()}/>          
+        </div>
+        <div className="style_block">
+          <label>Stroke</label>
+          <input ref={strokeColorPicker} disabled={props.toolbarState.isDisableStrokeColorPicker} type="color" id="stroke_color" className="color_picker" value={props.toolbarState.strokeColorPickerColor} onChange={() => changeShapeColor()}/>          
+        </div>
       </div>
     </div>
   )

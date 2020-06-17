@@ -8,7 +8,8 @@ type PropsType = {
   dispatch: any,
 }
 
-const Screen = (props: PropsType) => {
+const Screen = (props: any) => {
+  debugger
   return (
     <div className="screen">
       <Tools 

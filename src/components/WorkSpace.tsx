@@ -24,7 +24,9 @@ const WorkSpace = (props: PropsType): JSX.Element => {
     if (e.keyCode === 46 && props.selectedShape !== null) {
       let newShapes: Array<ShapesType> = props.shapes.slice();
       newShapes.splice(props.selectedShape, 1);
-      props.dispatch(changeShapesActionCreator(newShapes, newShapes.length))
+      props.dispatch(changeShapesActionCreator(newShapes, newShapes.length));
+      props.dispatch(switchDisableFillColorPickerActionCreator(true));
+      props.dispatch(switchDisableStrokeColorPickerActionCreator(true));
     }
   }
   useEffect(() => {

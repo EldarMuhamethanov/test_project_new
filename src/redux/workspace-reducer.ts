@@ -11,7 +11,14 @@ type WorkSpaceType = {
   isAnySelect: boolean,
 }
 
-const workspaceReducer = (state: WorkSpaceType, action: DispatchActionType): WorkSpaceType => {
+const initialState = {
+  count: 0,
+  shapes: [],
+  selectedShape: null,
+  isAnySelect: false,
+}
+
+const workspaceReducer = (state: WorkSpaceType = initialState, action: DispatchActionType): WorkSpaceType => {
   let newShapes: Array<ShapesType>;
   switch (action.type) {
     case CHANGE_SHAPES: 

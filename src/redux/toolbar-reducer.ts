@@ -12,7 +12,14 @@ type ToolbarStateType = {
   isDisableStrokeColorPicker: boolean,
 }
 
-export const toolbarReducer = (state: ToolbarStateType, action: DispatchActionType): ToolbarStateType => {
+const initialState = {
+  fillColorPickerColor: "#00000",
+  isDisableFillColorPicker: true,
+  strokeColorPickerColor: "#000000",
+  isDisableStrokeColorPicker: true,
+}
+
+export const toolbarReducer = (state: ToolbarStateType = initialState, action: DispatchActionType): ToolbarStateType => {
   switch (action.type) {
     case CHANGE_FILL_COLORPICKER_COLOR:
       state.fillColorPickerColor = action.data.newColor;
