@@ -13,25 +13,35 @@ type ToolbarStateType = {
 }
 
 const initialState = {
-  fillColorPickerColor: "#00000",
+  fillColorPickerColor: '#00000',
   isDisableFillColorPicker: true,
-  strokeColorPickerColor: "#000000",
+  strokeColorPickerColor: '#00000',
   isDisableStrokeColorPicker: true,
 }
+const localStorageState = (localStorage.getItem("toolbar") !== null) ? {
+  fillColorPickerColor: JSON.parse(localStorage.getItem("toolbar")!).fillColorPickerColor,
+  isDisableFillColorPicker: JSON.parse(localStorage.getItem("toolbar")!).isDisableFillColorPicker,
+  strokeColorPickerColor: JSON.parse(localStorage.getItem("toolbar")!).strokeColorPickerColor,
+  isDisableStrokeColorPicker: JSON.parse(localStorage.getItem("toolbar")!).isDisableStrokeColorPicker
+} : initialState
 
-export const toolbarReducer = (state: ToolbarStateType = initialState, action: DispatchActionType): ToolbarStateType => {
+export const toolbarReducer = (state: ToolbarStateType = localStorageState, action: DispatchActionType): ToolbarStateType => {
   switch (action.type) {
     case CHANGE_FILL_COLORPICKER_COLOR:
       state.fillColorPickerColor = action.data.newColor;
+      localStorage.setItem("toolbar", JSON.stringify(state));
       return state;
     case CHANGE_STROKE_COLORPICKER_COLOR:
       state.strokeColorPickerColor = action.data.newColor;
+      localStorage.setItem("toolbar", JSON.stringify(state));
       return state;
     case SWITCH_DISABLE_FILL_COLORPICKER:
       state.isDisableFillColorPicker = action.data.isDisabled;
+      localStorage.setItem("toolbar", JSON.stringify(state));
       return state;
     case SWITCH_DISABLE_STROKE_COLORPICKER:
       state.isDisableStrokeColorPicker = action.data.isDisabled;
+      localStorage.setItem("toolbar", JSON.stringify(state));
       return state
     default:
       return state

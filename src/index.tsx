@@ -8,8 +8,7 @@ import store from './redux/redux-store';
 let rerenderEntireTree = (state?: any): any => {
   ReactDOM.render(
     < Screen
-      state={state}
-      dispatch={store.dispatch.bind(store)}
+      store={store}
     />, document.getElementById("root"));
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
-import Tools from './Tools';
-import WorkSpace from './WorkSpace';
 import { StoreStateType } from '../types';
+import WorkSpaceContainer from './WorkSpaceContainer';
+import ToolsContainer from './ToolsContainer';
 
 type PropsType = {
   state: StoreStateType,
@@ -9,21 +9,13 @@ type PropsType = {
 }
 
 const Screen = (props: any) => {
-  debugger
   return (
     <div className="screen">
-      <Tools 
-        toolbarState={props.state.toolbar}
-        countShapes={props.state.workSpace.count}
-        shapes={props.state.workSpace.shapes}
-        dispatch={props.dispatch}
-        selectedShape={props.state.workSpace.selectedShape}
+      <ToolsContainer 
+        store={props.store}
       />
-      <WorkSpace 
-        countShapes={props.state.workSpace.count}
-        shapes={props.state.workSpace.shapes}
-        selectedShape={props.state.workSpace.selectedShape}
-        dispatch={props.dispatch}
+      <WorkSpaceContainer
+        store={props.store}
       />
     </div>
   );

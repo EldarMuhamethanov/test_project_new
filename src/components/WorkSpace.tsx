@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import Shapes from './Shapes';
 import { ShapesType } from '../types';
-import { changeShapesActionCreator, dischargeSelectActionCreator } from '../redux/workspace-reducer';
-import { switchDisableFillColorPickerActionCreator, switchDisableStrokeColorPickerActionCreator } from '../redux/toolbar-reducer';
 
 type PropsType = {
   countShapes: number,
@@ -11,22 +9,23 @@ type PropsType = {
   dispatch: any,
 }
 
-const WorkSpace = (props: PropsType): JSX.Element => {
+const WorkSpace = (props: any): JSX.Element => {
 
   const clickOnScreen = (e: React.MouseEvent): void => {
-    e.preventDefault();
-    props.dispatch(dischargeSelectActionCreator());
-    props.dispatch(switchDisableFillColorPickerActionCreator(true));
-    props.dispatch(switchDisableStrokeColorPickerActionCreator(true));
+    if (!e.defaultPrevented) {
+      props.dischargeSelect();
+      props.switchDisableFillColorPicker(true);
+      props.switchDisableStrokeColorPicker(true);
+    }
   }
 
   const deleteShape = (e: any): void => {
     if (e.keyCode === 46 && props.selectedShape !== null) {
       let newShapes: Array<ShapesType> = props.shapes.slice();
       newShapes.splice(props.selectedShape, 1);
-      props.dispatch(changeShapesActionCreator(newShapes, newShapes.length));
-      props.dispatch(switchDisableFillColorPickerActionCreator(true));
-      props.dispatch(switchDisableStrokeColorPickerActionCreator(true));
+      props.changeShapes(newShapes);
+      props.switchDisableFillColorPicker(true);
+      props.switchDisableStrokeColorPicker(true);
     }
   }
   useEffect(() => {
@@ -38,10 +37,8 @@ const WorkSpace = (props: PropsType): JSX.Element => {
   return (
     <div id="work_space" className="right_part" onClick={clickOnScreen}>
       <Shapes 
-        countShapes={props.countShapes}
         shapes={props.shapes}
-        selectedShape={props.selectedShape}
-        dispatch={props.dispatch}
+        store={props.store}
       />
     </div>
     )

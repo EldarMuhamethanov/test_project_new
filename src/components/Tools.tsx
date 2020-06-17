@@ -2,9 +2,6 @@ import React, { useRef } from 'react';
 import rectangle from './../images/Rectangle2.png';
 import triangle from './../images/Polygon1.png';
 import { ShapesType } from '../types';
-//import { changeShapesActionCreator, changeFillColorPickerColorActionCreator, changeStrokeColorPickerColorActionCreator } from '../redux/state';
-import { changeShapesActionCreator } from '../redux/workspace-reducer';
-import { changeStrokeColorPickerColorActionCreator, changeFillColorPickerColorActionCreator } from '../redux/toolbar-reducer';
 
 type PropsType = {
   toolbarState: any, 
@@ -14,7 +11,7 @@ type PropsType = {
   dispatch: any
 }
 
-const Tools = (props: PropsType): JSX.Element => {
+const Tools = (props: any): JSX.Element => {
 
   const fillColorPicker: any = useRef(null);
   const strokeColorPicker: any = useRef(null);
@@ -22,13 +19,13 @@ const Tools = (props: PropsType): JSX.Element => {
   const changeShapeColor = (): void => {
     if (props.selectedShape !== null) {
       const newFillColor: any = fillColorPicker.current.value;
-      props.dispatch(changeFillColorPickerColorActionCreator(newFillColor));
+      props.changeFillColorPickerColor(newFillColor);
       const newStrokeColor = strokeColorPicker.current.value;
-      props.dispatch(changeStrokeColorPickerColorActionCreator(newStrokeColor));
+      props.changeStrokeColorPickerColor(newStrokeColor);
       let newShapes = props.shapes.slice();
       newShapes[props.selectedShape].bgcolor = newFillColor;
       newShapes[props.selectedShape].stroke = newStrokeColor;
-      props.dispatch(changeShapesActionCreator(newShapes, newShapes.length))
+      props.changeShapes(newShapes);
     }
   }
 
@@ -48,7 +45,7 @@ const Tools = (props: PropsType): JSX.Element => {
         height: height,
       }
     ]);
-    props.dispatch(changeShapesActionCreator(newShapes, newShapes.length))
+    props.changeShapes(newShapes);
   }
 
   return (
@@ -75,11 +72,11 @@ const Tools = (props: PropsType): JSX.Element => {
         <h2>Style</h2>
         <div className="style_block">
           <label>Fill</label>
-          <input ref={fillColorPicker} disabled={props.toolbarState.isDisableFillColorPicker} type="color" id="fill_color" className="color_picker" value={props.toolbarState.fillColorPickerColor} onChange={() => changeShapeColor()}/>          
+          <input ref={fillColorPicker} disabled={props.isDisableFillColorPicker} type="color" id="fill_color" className="color_picker" value={props.fillColorPickerColor} onChange={() => changeShapeColor()}/>          
         </div>
         <div className="style_block">
           <label>Stroke</label>
-          <input ref={strokeColorPicker} disabled={props.toolbarState.isDisableStrokeColorPicker} type="color" id="stroke_color" className="color_picker" value={props.toolbarState.strokeColorPickerColor} onChange={() => changeShapeColor()}/>          
+          <input ref={strokeColorPicker} disabled={props.isDisableStrokeColorPicker} type="color" id="stroke_color" className="color_picker" value={props.strokeColorPickerColor} onChange={() => changeShapeColor()}/>          
         </div>
       </div>
     </div>

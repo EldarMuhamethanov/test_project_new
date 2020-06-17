@@ -18,12 +18,20 @@ const initialState = {
   isAnySelect: false,
 }
 
-const workspaceReducer = (state: WorkSpaceType = initialState, action: DispatchActionType): WorkSpaceType => {
+const localStorageState = (localStorage.getItem("workSpace") !== null) ? {
+  count: JSON.parse(localStorage.getItem("workSpace")!).count,
+  shapes: JSON.parse(localStorage.getItem("workSpace")!).shapes,
+  selectedShape: JSON.parse(localStorage.getItem("workSpace")!).selectedShape,
+  isAnySelect: JSON.parse(localStorage.getItem("workSpace")!).isAnySelect,
+} : initialState
+
+const workspaceReducer = (state: any = localStorageState, action: DispatchActionType): WorkSpaceType => {
   let newShapes: Array<ShapesType>;
   switch (action.type) {
     case CHANGE_SHAPES: 
       state.shapes = action.data.newShapes;
       state.count = action.data.count;
+      localStorage.setItem("workSpace", JSON.stringify(state));
       return state
     case CHANGE_SELECT:
       newShapes = state.shapes.slice();
@@ -59,6 +67,7 @@ const workspaceReducer = (state: WorkSpaceType = initialState, action: DispatchA
         }
       })
       state.shapes = newShapes;
+      localStorage.setItem("workSpace", JSON.stringify(state));
       return state
     case DISCHARGE_SELECT: 
       newShapes = state.shapes.slice();
@@ -76,8 +85,10 @@ const workspaceReducer = (state: WorkSpaceType = initialState, action: DispatchA
       })
       state.shapes = newShapes;
       state.selectedShape = null;
+      localStorage.setItem("workSpace", JSON.stringify(state));
       return state
     default:
+      localStorage.setItem("workSpace", JSON.stringify(state));
       return state
   }
 }
