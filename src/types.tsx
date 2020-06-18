@@ -10,6 +10,26 @@ export type ShapesType = {
   width: number,
   height: number,
 }
+
+export type WorkSpaceType = {
+  count: number,
+  shapes: Array<ShapesType>,
+  selectedShape: number | null,
+  isAnySelect: boolean,
+}
+export type ToolbarStateType = {
+  fillColorPickerColor: string,
+  isDisableFillColorPicker: boolean,
+  strokeColorPickerColor: string,
+  isDisableStrokeColorPicker: boolean,
+}
+
+export type StoreType = {
+  workSpace: WorkSpaceType,
+  toolbar: ToolbarStateType,
+  dispatch: (action: string) => void 
+}
+
 export type ViewBoxType = [number, number, number, number];
 
 export type StyleShapeType = {
@@ -31,14 +51,6 @@ export type StoreStateType = {
     strokeColorPickerColor: string,
     isDisableStrokeColorPicker: boolean,
   }
-}
-
-export type StoreType = {
-  _state: StoreStateType,
-  getState: () => StoreStateType,
-  _callSubscriber: (state: any) => void,
-  subscribe: (observer: any) => void,
-  dispatch: (action: DispatchActionType) => void,
 }
 
 export type DispatchActionType = {

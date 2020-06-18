@@ -1,31 +1,29 @@
-import { DispatchActionType } from "../types";
+import { DispatchActionType, ToolbarStateType } from "../types";
 
 const CHANGE_FILL_COLORPICKER_COLOR = 'CHANGE-FILL-COLORPICKER-COLOR';
 const CHANGE_STROKE_COLORPICKER_COLOR = 'CHANGE-STROKE-COLORPICKER-COLOR'; 
 const SWITCH_DISABLE_FILL_COLORPICKER = 'SWITCH-DISABLE-FILL-COLORPICKER';
 const SWITCH_DISABLE_STROKE_COLORPICKER = 'SWITCH-DISABLE-STROKE-COLORPICKER';
 
-type ToolbarStateType = {
-  fillColorPickerColor: string,
-  isDisableFillColorPicker: boolean,
-  strokeColorPickerColor: string,
-  isDisableStrokeColorPicker: boolean,
-}
-
-const initialState = {
+const initialState: ToolbarStateType = (localStorage.getItem("toolbar") === null) ? {
   fillColorPickerColor: '#00000',
   isDisableFillColorPicker: true,
   strokeColorPickerColor: '#00000',
   isDisableStrokeColorPicker: true,
-}
-const localStorageState = (localStorage.getItem("toolbar") !== null) ? {
+} : {
   fillColorPickerColor: JSON.parse(localStorage.getItem("toolbar")!).fillColorPickerColor,
   isDisableFillColorPicker: JSON.parse(localStorage.getItem("toolbar")!).isDisableFillColorPicker,
   strokeColorPickerColor: JSON.parse(localStorage.getItem("toolbar")!).strokeColorPickerColor,
   isDisableStrokeColorPicker: JSON.parse(localStorage.getItem("toolbar")!).isDisableStrokeColorPicker
-} : initialState
+}
+// const localStorageState: ToolbarStateType = (localStorage.getItem("toolbar") !== null) ? {
+//   fillColorPickerColor: JSON.parse(localStorage.getItem("toolbar")!).fillColorPickerColor,
+//   isDisableFillColorPicker: JSON.parse(localStorage.getItem("toolbar")!).isDisableFillColorPicker,
+//   strokeColorPickerColor: JSON.parse(localStorage.getItem("toolbar")!).strokeColorPickerColor,
+//   isDisableStrokeColorPicker: JSON.parse(localStorage.getItem("toolbar")!).isDisableStrokeColorPicker
+// } : initialState
 
-export const toolbarReducer = (state: ToolbarStateType = localStorageState, action: DispatchActionType): ToolbarStateType => {
+export const toolbarReducer = (state: ToolbarStateType = initialState, action: DispatchActionType): ToolbarStateType => {
   switch (action.type) {
     case CHANGE_FILL_COLORPICKER_COLOR:
       state.fillColorPickerColor = action.data.newColor;

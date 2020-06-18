@@ -1,8 +1,8 @@
-import { ShapesType, StoreType, StoreStateType, DispatchActionType } from '../types';
+import { ShapesType, StoreStateType, DispatchActionType } from '../types';
 import workspaceReducer from './workspace-reducer';
 import toolbarReducer from './toolbar-reducer';
 
-let store: StoreType = {
+let store: any = {
   _state: {
     workSpace: {
       count: 0,

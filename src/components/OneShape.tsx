@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { ShapesType, ViewBoxType, StyleShapeType } from '../types';
 
-const OneShape = (props: any): any => {
+const OneShape = (props: any): JSX.Element => {
 
   const refShape: any = useRef(null);
   
@@ -38,7 +38,7 @@ const OneShape = (props: any): any => {
     refShape.current.removeEventListener('mousemove', mouseMove);
     refShape.current.removeEventListener('mouseup', mouseUp);
     let newShapes: Array<ShapesType> = props.shapes.slice();
-    let indexShape = +refShape.current.dataset.id;
+    let indexShape: number = +refShape.current.dataset.id;
     newShapes[indexShape].left = getComputedStyle(refShape.current).left;
     newShapes[indexShape].top = getComputedStyle(refShape.current).top;
     props.changeShapes(newShapes);
@@ -52,31 +52,28 @@ const OneShape = (props: any): any => {
   const mouseDown = (): void => {
     refShape.current.addEventListener('mousemove', mouseMove);
     refShape.current.addEventListener('mouseup', mouseUp);
-    let indexShape = +refShape.current.dataset.id;
+    let indexShape: number = +refShape.current.dataset.id;
     props.changeSelect(indexShape);
     props.changeFillColorPickerColor(props.shapes[indexShape].bgcolor);
     props.changeStrokeColorPickerColor(props.shapes[indexShape].stroke);
   }
 
-  const renderShape = (): any => {
+  const renderShape = (): JSX.Element => {
     const viewBox: ViewBoxType = [0, 0, 150, 100];
-    const border: string = "2px dashed red";
-    const row = props.shapes[props.index];
-    const index = props.index;
+    const row: ShapesType = props.shapes[props.index];
+    const index: string = props.index;
     let style: StyleShapeType;
-    if (row.isSelected) {
-      style = {
-        top: row.top,
-        left: row.left,
-        border: border
-      }
-    } else {
-      style = {
-        top: row.top,
-        left: row.left
-      }
+    if (row.isSelected && refShape.current !== null) {
+      refShape.current.classList.remove('not_selected_shape');
+      refShape.current.classList.add('selected_shape');
+    } else if (!row.isSelected && refShape.current !== null) {
+      refShape.current.classList.add('not_selected_shape');
+      refShape.current.classList.remove('selected_shape');
     }
-    debugger
+    let position = {
+      top: row.top,
+      left: row.left,
+    }
     if (row.type === 'rect') {
       return (
         <svg 
@@ -85,8 +82,8 @@ const OneShape = (props: any): any => {
           key={index}
           id={'svg' + index}
           data-id={index}
-          className="shape"
-          style={style}
+          className="shape not_selected_shape"
+          style={position}
           viewBox={"" + viewBox}
           ref={refShape}
           onMouseDown={mouseDown}
@@ -112,7 +109,7 @@ const OneShape = (props: any): any => {
           height={row.height} 
           key={index}
           className="shape"
-          style={ style }
+          style={ position }
           viewBox={"" + viewBox}
           id={"svg" + index}
           data-id={index}
@@ -120,7 +117,7 @@ const OneShape = (props: any): any => {
           onMouseDown={mouseDown}
           >
             <polygon 
-              points="5,95 70,5 145,95" 
+              points="5,98 70,5 145,98" 
               fill={row.bgcolor} 
               stroke={row.stroke} 
               strokeWidth="5"
@@ -129,6 +126,7 @@ const OneShape = (props: any): any => {
         </svg>
       )
     }
+    return(<div></div>)
   }
   return (
     renderShape()    

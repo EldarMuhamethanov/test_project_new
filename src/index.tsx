@@ -1,20 +1,21 @@
 import ReactDOM from 'react-dom';
 import './style.css';
-//import '.fonts/Roboto-Regular.ttf'
 import React from 'react';
 import Screen from './components/Screen';
 import store from './redux/redux-store';
+import StoreContext from './components/StoreContext';
 
-let rerenderEntireTree = (state?: any): any => {
+
+
+let rerenderEntireTree = (): void => {
   ReactDOM.render(
-    < Screen
-      store={store}
-    />, document.getElementById("root"));
+    <StoreContext.Provider value={store}>
+      < Screen />
+    </StoreContext.Provider>, document.getElementById("root"));
 };
 
-rerenderEntireTree(store.getState());
+rerenderEntireTree();
 
 store.subscribe(() => {
-  let state = store.getState();
-  rerenderEntireTree(state);
+  rerenderEntireTree();
 });

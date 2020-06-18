@@ -95,6 +95,10 @@ rect:hover
 {
   border: 2px dashed red;
 }
+.not_selected_shape
+{
+  padding: 2px;
+}
 .grab:hover
 {
   cursor: grab;

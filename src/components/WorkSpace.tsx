@@ -36,10 +36,7 @@ const WorkSpace = (props: any): JSX.Element => {
   })
   return (
     <div id="work_space" className="right_part" onClick={clickOnScreen}>
-      <Shapes 
-        shapes={props.shapes}
-        store={props.store}
-      />
+      <Shapes />
     </div>
     )
 }

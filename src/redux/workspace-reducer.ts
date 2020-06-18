@@ -1,31 +1,31 @@
-import { DispatchActionType, ShapesType } from "../types";
+import { DispatchActionType, ShapesType, WorkSpaceType } from "../types";
 
 const CHANGE_SHAPES = 'CHANGE-SHAPES';
 const CHANGE_SELECT = 'CHANGE-SELECT';
 const DISCHARGE_SELECT = 'DISCHARGE-SELECT';
 
-type WorkSpaceType = {
-  count: number,
-  shapes: Array<ShapesType>,
-  selectedShape: number | null,
-  isAnySelect: boolean,
-}
 
-const initialState = {
+
+const initialState: WorkSpaceType = (localStorage.getItem("workSpace") === null) ? {
   count: 0,
   shapes: [],
   selectedShape: null,
   isAnySelect: false,
-}
-
-const localStorageState = (localStorage.getItem("workSpace") !== null) ? {
+} : {
   count: JSON.parse(localStorage.getItem("workSpace")!).count,
   shapes: JSON.parse(localStorage.getItem("workSpace")!).shapes,
   selectedShape: JSON.parse(localStorage.getItem("workSpace")!).selectedShape,
   isAnySelect: JSON.parse(localStorage.getItem("workSpace")!).isAnySelect,
-} : initialState
+} 
 
-const workspaceReducer = (state: any = localStorageState, action: DispatchActionType): WorkSpaceType => {
+// const localStorageState: WorkSpaceType = (localStorage.getItem("workSpace") !== null) ? {
+//   count: JSON.parse(localStorage.getItem("workSpace")!).count,
+//   shapes: JSON.parse(localStorage.getItem("workSpace")!).shapes,
+//   selectedShape: JSON.parse(localStorage.getItem("workSpace")!).selectedShape,
+//   isAnySelect: JSON.parse(localStorage.getItem("workSpace")!).isAnySelect,
+// } : initialState
+
+const workspaceReducer = (state: WorkSpaceType = initialState, action: DispatchActionType): WorkSpaceType => {
   let newShapes: Array<ShapesType>;
   switch (action.type) {
     case CHANGE_SHAPES: 

@@ -1,6 +1,8 @@
 import React from 'react'
 import { ShapesType } from '../types';
 import OneShapeContainer from './OneShapeContainer';
+import StoreContext from './StoreContext';
+import store from '../redux/redux-store';
 
 type PropsType = {
   countShapes: number
@@ -9,18 +11,24 @@ type PropsType = {
   dispatch: any
 }
 
-const Shapes = (props: any): JSX.Element => {
-  const renderShapes = (): any => { 
-    const rows = props.shapes.map((row: ShapesType, index: number) => {
-      return <OneShapeContainer
-        store={props.store}
-        index={index}/>
-    })
-    return rows;
-  }
+const Shapes = (): JSX.Element  => {
   return (
-    renderShapes()    
-  );
+    <StoreContext.Consumer>
+      {
+        (store: any) => {
+          const renderShapes = (): JSX.Element=> { 
+            const shapes: JSX.Element = store.getState().workSpace.shapes.map((row: ShapesType, index: number): JSX.Element => {
+              return <OneShapeContainer index={index}/>
+            })
+            return shapes;
+          }
+          return (
+            renderShapes()    
+          );
+        }
+      }
+    </StoreContext.Consumer>
+  )
 }
 
 export default Shapes
