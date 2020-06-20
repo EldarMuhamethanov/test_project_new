@@ -1,21 +1,35 @@
 import React, { useRef } from 'react'
-import { ShapesType, ViewBoxType, StyleShapeType } from '../types';
+import { ShapesType, ViewBoxType, PositionShapeType } from '../types';
+import store from '../redux/redux-store';
+import { setSelectionActionCreator } from '../redux/state-reducer';
+
+type PropsType = {
+  changeShapes: (newShapes: Array<ShapesType>) => void,
+  changeSelect: (indexShape: number) => void,
+  switchDisableFillColorPicker: (isDisabled: boolean) => void,
+  switchDisableStrokeColorPicker: (isDisabled: boolean) => void,
+  changeFillColorPickerColor: (newColor: string) => void, 
+  changeStrokeColorPickerColor: (newColor: string) => void,
+  shapes: Array<ShapesType>,
+  index: number,
+}
 
 const OneShape = (props: any): JSX.Element => {
 
-  const refShape: any = useRef(null);
+  const refShape: any = useRef<any>(null);
   
   const selectShape = (e: React.MouseEvent): void => {
     e.preventDefault();
+    console.log(store.getState());
   }
 
-  const mouseMove = (e: React.MouseEvent): void => {
+  const mouseMove = (e: MouseEvent): void => {
     const cursorX: number = e.pageX;
     const cursorY: number = e.pageY;
     const windowWidth: number = window.innerWidth; 
     const windowHeight: number = window.innerHeight;
-    const shapeWidth: number = props.shapes[props.index].width;
-    const shapeHeight: number = props.shapes[props.index].height;
+    const shapeWidth: number = store.getState().shapes[props.index].width;
+    const shapeHeight: number = store.getState().shapes[props.index].height;
     if (cursorX <= windowWidth * 0.25 + shapeWidth / 2) {
       refShape.current.style.left = 0;
       refShape.current.style.top = cursorY - shapeHeight / 2;
@@ -35,42 +49,44 @@ const OneShape = (props: any): JSX.Element => {
   }
 
   const mouseUp = (): void => {
-    refShape.current.removeEventListener('mousemove', mouseMove);
-    refShape.current.removeEventListener('mouseup', mouseUp);
-    let newShapes: Array<ShapesType> = props.shapes.slice();
+    document.body.removeEventListener('mousemove', mouseMove);
+    document.body.removeEventListener('mouseup', mouseUp);
+    refShape.current.firstChild.classList.remove('grabbing');
+    refShape.current.firstChild.classList.add('grab');
+    let newShapes: Array<ShapesType> = store.getState().shapes.slice();
     let indexShape: number = +refShape.current.dataset.id;
     newShapes[indexShape].left = getComputedStyle(refShape.current).left;
     newShapes[indexShape].top = getComputedStyle(refShape.current).top;
-    props.changeShapes(newShapes);
-    props.changeSelect(indexShape);
-    props.switchDisableFillColorPicker(false);
-    props.switchDisableStrokeColorPicker(false);
-    props.changeFillColorPickerColor(props.shapes[indexShape].bgcolor);
-    props.changeStrokeColorPickerColor(props.shapes[indexShape].stroke);
+    store.getState().shapes = newShapes;
+    console.log(store.getState());
   }
   
-  const mouseDown = (): void => {
-    refShape.current.addEventListener('mousemove', mouseMove);
-    refShape.current.addEventListener('mouseup', mouseUp);
-    let indexShape: number = +refShape.current.dataset.id;
-    props.changeSelect(indexShape);
-    props.changeFillColorPickerColor(props.shapes[indexShape].bgcolor);
-    props.changeStrokeColorPickerColor(props.shapes[indexShape].stroke);
+  const mouseDown = (e: any): void => {
+    if (!e.defaultPrevented) {
+      e.preventDefault();
+      document.body.addEventListener('mousemove', mouseMove);
+      document.body.addEventListener('mouseup', mouseUp);
+      refShape.current.firstChild.classList.add('grabbing');
+      refShape.current.firstChild.classList.remove('grab');
+      let indexShape: number = +refShape.current.dataset.id;
+      store.dispatch(setSelectionActionCreator(indexShape));
+      console.log(store.getState());
+    }
   }
 
   const renderShape = (): JSX.Element => {
     const viewBox: ViewBoxType = [0, 0, 150, 100];
-    const row: ShapesType = props.shapes[props.index];
-    const index: string = props.index;
-    let style: StyleShapeType;
-    if (row.isSelected && refShape.current !== null) {
+    const row: ShapesType = store.getState().shapes[props.index];
+    const index: string = props.index + "";
+    if (props.index === store.getState().selectedShapeId && refShape.current !== null) {
       refShape.current.classList.remove('not_selected_shape');
       refShape.current.classList.add('selected_shape');
-    } else if (!row.isSelected && refShape.current !== null) {
+    } else if (props.index !== store.getState().selectedShapeId && refShape.current !== null) {
       refShape.current.classList.add('not_selected_shape');
       refShape.current.classList.remove('selected_shape');
+      
     }
-    let position = {
+    let position: PositionShapeType = {
       top: row.top,
       left: row.left,
     }
@@ -93,8 +109,9 @@ const OneShape = (props: any): JSX.Element => {
               y="0"
               width={row.width}
               height={row.height}
-              fill={row.bgcolor}
-              stroke={row.stroke}
+              className="grab"
+              fill={row.fillColor}
+              stroke={row.strokeColor}
               strokeWidth="5"
               onClick={selectShape}
             />
@@ -108,7 +125,7 @@ const OneShape = (props: any): JSX.Element => {
           width={row.width}
           height={row.height} 
           key={index}
-          className="shape"
+          className="shape not_selected_shape"
           style={ position }
           viewBox={"" + viewBox}
           id={"svg" + index}
@@ -117,16 +134,17 @@ const OneShape = (props: any): JSX.Element => {
           onMouseDown={mouseDown}
           >
             <polygon 
-              points="5,98 70,5 145,98" 
-              fill={row.bgcolor} 
-              stroke={row.stroke} 
+              points="5,98 70,5 145,98"
+              className="grab" 
+              fill={row.fillColor} 
+              stroke={row.strokeColor} 
               strokeWidth="5"
               onClick={selectShape}
             />
         </svg>
       )
     }
-    return(<div></div>)
+    return(<div>Непредвиденная ошибка</div>)
   }
   return (
     renderShape()    

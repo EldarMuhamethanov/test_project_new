@@ -1,12 +1,6 @@
-import { createStore, combineReducers } from "redux";
-import workspaceReducer from "./workspace-reducer";
-import toolbarReducer from "./toolbar-reducer";
+import { createStore } from "redux";
+import stateReducer from "./state-reducer";
 
-let reducers = combineReducers({
-  workSpace: workspaceReducer,
-  toolbar: toolbarReducer
-});
-
-let store = createStore(reducers);
+let store = createStore(stateReducer);
 
 export default store 

@@ -1,59 +1,34 @@
-//import React from 'react';
+// type вынести в enum
 
+import { type } from "os";
+
+// привести имена bgcolor, stroke, fillColor, strokeColor к одному виду
 export type ShapesType = {
   left: string,
   top: string,
-  isSelected: boolean,
-  type: string,
-  bgcolor: string,
-  stroke: string,
+  type: ShapeType,
+  fillColor: string,
+  strokeColor: string,
   width: number,
   height: number,
+  //id: number,
 }
 
-export type WorkSpaceType = {
-  count: number,
-  shapes: Array<ShapesType>,
-  selectedShape: number | null,
-  isAnySelect: boolean,
-}
-export type ToolbarStateType = {
-  fillColorPickerColor: string,
-  isDisableFillColorPicker: boolean,
-  strokeColorPickerColor: string,
-  isDisableStrokeColorPicker: boolean,
-}
-
-export type StoreType = {
-  workSpace: WorkSpaceType,
-  toolbar: ToolbarStateType,
-  dispatch: (action: string) => void 
-}
+export type ShapeType = "rect" | "triangle";
 
 export type ViewBoxType = [number, number, number, number];
 
-export type StyleShapeType = {
+export type PositionShapeType = {
   left: string,
   top: string,
-  border?: string,
 }
 
-export type StoreStateType = {
-  workSpace: {
-    count: number,
-    shapes: Array<ShapesType>,
-    selectedShape: number | null,
-    isAnySelect: boolean,
-  }
-  toolbar: {
-    fillColorPickerColor: string,
-    isDisableFillColorPicker: boolean,
-    strokeColorPickerColor: string,
-    isDisableStrokeColorPicker: boolean,
-  }
-}
+// export type DispatchActionType = {
+//   type: string,
+//   data?: any
+// }
 
-export type DispatchActionType = {
-  type: string,
-  data?: any
-}
+// export type StoreType = {
+//   getState: () => StoreStateType;
+//   dispatch: (action: DispatchActionType) => void; 
+// }
