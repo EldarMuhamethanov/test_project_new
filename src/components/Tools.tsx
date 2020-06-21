@@ -1,18 +1,18 @@
 import React, { useRef } from 'react';
 import rectangle from './../images/Rectangle2.png';
 import triangle from './../images/Polygon1.png';
-import { addShapeActionCreator, setColorActionCreator, initialStateType } from '../redux/state-reducer';
+import { addShapeActionCreator, setColorActionCreator, StateType, ActionTypes } from '../redux/state-reducer';
 import StoreContext from './StoreContext';
 import { Store } from 'redux';
 
-const Tools = (): any => {
+const Tools = (): JSX.Element => {
 
   const fillColorPicker: any = useRef(null);
   const strokeColorPicker: any = useRef(null);
   return (
     <StoreContext.Consumer>
       {
-        (store: any) => {
+        (store: Store<StateType, ActionTypes>) => {
           const changeShapeColor = (): void => {
             debugger;
             if (store.getState().selectedShapeId !== null) {
@@ -49,7 +49,7 @@ const Tools = (): any => {
                   <input
                     ref={fillColorPicker} disabled={store.getState().selectedShapeId == null}
                     type="color" id="fill_color" className="color_picker"
-                    value={store.getState().selectedShapeId !== null ? store.getState().shapes[store.getState().selectedShapeId].fillColor : '#000'}
+                    value={store.getState().selectedShapeId !== null ? store.getState().shapes[Number(store.getState().selectedShapeId)].fillColor : '#000000'}
                     onChange={() => changeShapeColor()} />          
                 </div>
                 <div className="style_block">
@@ -57,7 +57,7 @@ const Tools = (): any => {
                   <input
                     ref={strokeColorPicker} disabled={store.getState().selectedShapeId == null}
                     type="color" id="stroke_color" className="color_picker"
-                    value={store.getState().selectedShapeId !== null ? store.getState().shapes[store.getState().selectedShapeId].strokeColor : '#000'}
+                    value={store.getState().selectedShapeId !== null ? store.getState().shapes[Number(store.getState().selectedShapeId)].strokeColor : '#000000'}
                     onChange={() => changeShapeColor()} />          
                 </div>
               </div>

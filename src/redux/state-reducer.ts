@@ -5,25 +5,22 @@ const REMOVE_SHAPE = 'REMOVE_SHAPE';
 const SET_SELECTION = 'SET_SELECTION';
 const SET_COLOR = 'SET_COLOR';
 
-export type initialStateType = {
-  shapes: Array<ShapesType>,
-  selectedShapeId: number | null
+export type StateType = typeof initialState;
+
+let initialState = {
+  shapes: [] as Array<ShapesType>,
+  selectedShapeId: null as null | number
 }
-let initialState: initialStateType = {
-  shapes: [],
-  selectedShapeId: null
-}
-let storageState;
 
 if (localStorage.getItem("state") !== null) {
-  storageState = JSON.parse(localStorage.getItem("state")!)
+  let storageState: typeof initialState = JSON.parse(String(localStorage.getItem("state")))
   initialState = {
     shapes: storageState.shapes,
     selectedShapeId: storageState.selectedShapeId
   }
 }
 
-const stateReducer = (state = initialState, action: any): initialStateType => {
+const stateReducer = (state = initialState, action: ActionTypes): StateType => {
   let newShapes: Array<ShapesType>;
   switch (action.type) {
     case ADD_SHAPE:
@@ -42,39 +39,41 @@ const stateReducer = (state = initialState, action: any): initialStateType => {
           height: height,
         }
       ]);
-      state.shapes = newShapes;
-
-      return state;
+      localStorage.setItem("state", JSON.stringify({ ...state, shapes: newShapes}));
+      return { ...state, shapes: newShapes};
     
     case REMOVE_SHAPE:
       newShapes = state.shapes.slice();
       if (state.selectedShapeId !== null) {
         newShapes.splice(+state.selectedShapeId, 1);
       }
-      state.shapes = newShapes;
-      state.selectedShapeId = null;
-      return state;
+      localStorage.setItem("state", JSON.stringify({ ...state, shapes: newShapes, selectedShapeId: null}));
+      return { ...state, shapes: newShapes, selectedShapeId: null};
     
     case SET_SELECTION:
-      state.selectedShapeId = action.data.shapeId;
-      return state;
+      localStorage.setItem("state", JSON.stringify({ ...state, selectedShapeId: action.data.shapeId}));
+      return { ...state, selectedShapeId: action.data.shapeId};
     
     case SET_COLOR:
       if (state.selectedShapeId !== null) {
         state.shapes[state.selectedShapeId].fillColor = action.data.newFillColor;
         state.shapes[state.selectedShapeId].strokeColor = action.data.newStrokeColor;
       }
+      localStorage.setItem("state", JSON.stringify(state));
       return state;
+    
     default:
+      localStorage.setItem("state", JSON.stringify(state));
       return state;
   }
 }
-type addShapeActionCreatorType = {
+export type addShapeActionCreatorType = {
   type: typeof ADD_SHAPE,
   data: {
     shapeType: ShapeType
   }
 }
+
 export const addShapeActionCreator = (type: ShapeType): addShapeActionCreatorType => {
   return {
     type: ADD_SHAPE,
@@ -84,7 +83,7 @@ export const addShapeActionCreator = (type: ShapeType): addShapeActionCreatorTyp
   }
 }
 
-type removeShapeActionCreatorType = {
+export type removeShapeActionCreatorType = {
   type: typeof REMOVE_SHAPE;
 } 
 
@@ -94,7 +93,7 @@ export const removeShapeActionCreator = (): removeShapeActionCreatorType => {
   }
 }
 
-type setSelectionActionCreatorType = {
+export type setSelectionActionCreatorType = {
   type: typeof SET_SELECTION,
   data: {
     shapeId: number | null, 
@@ -110,7 +109,7 @@ export const setSelectionActionCreator = (shapeId: number | null): setSelectionA
   }
 }
 
-type setColorActionCreatorType = {
+export type setColorActionCreatorType = {
   type: typeof SET_COLOR,
     data: {
       newFillColor: string,
@@ -118,14 +117,46 @@ type setColorActionCreatorType = {
     }
 }
 
-export const setColorActionCreator = (newFillColor: string, newStrokeColor: string): setColorActionCreatorType => {
+export const setColorActionCreator = (newFillColor: string, newStrokeColor: string) => {
   return {
     type: SET_COLOR,
     data: {
       newFillColor: newFillColor,
       newStrokeColor: newStrokeColor
     }
-  }
+  } as const
+}
+
+export type ActionTypes = ReturnType<PropertiesType<typeof actions>>;
+
+export type PropertiesType<T> = T extends { [key: string]: infer U} ? U: never;
+
+const actions = {
+  Ac1: (type: ShapeType) => ({
+    type: ADD_SHAPE,
+    data: {
+      shapeType: type
+    }
+  } as const),
+
+  Ac2: () => ({
+    type: REMOVE_SHAPE
+  } as const),
+
+  Ac3: (shapeId: number | null) => ({
+    type: SET_SELECTION,
+    data: {
+      shapeId: shapeId
+    }
+  } as const),
+
+  Ac4: (newFillColor: string, newStrokeColor: string) => ({
+    type: SET_COLOR,
+    data: {
+      newFillColor: newFillColor,
+      newStrokeColor: newStrokeColor
+    }
+  } as const)
 }
 
 export default stateReducer;

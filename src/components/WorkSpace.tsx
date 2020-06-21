@@ -1,10 +1,16 @@
 import React, { useEffect } from 'react';
 import { ShapesType } from '../types';
-import { removeShapeActionCreator } from '../redux/state-reducer';
+import { removeShapeActionCreator, setSelectionActionCreator } from '../redux/state-reducer';
 import OneShape from './OneShape';
 
 
 const WorkSpace = (props: any): JSX.Element => {
+  
+  const clickOnScreen = (e: React.MouseEvent): void => {
+    if (!e.defaultPrevented) {
+      props.store.dispatch(setSelectionActionCreator(null));
+    }
+  }
 
   const deleteShape = (e: KeyboardEvent): void => {
     if (e.keyCode === 46 && props.store.getState().selectedShapeId !== null) {
@@ -20,14 +26,16 @@ const WorkSpace = (props: any): JSX.Element => {
   })
   
   const renderShapes = (): JSX.Element=> { 
-    const shapes: any = props.store.getState().shapes.map((row: ShapesType, index: number): JSX.Element => {
-      return <OneShape index={index}/>
+    const shapes: JSX.Element = props.store.getState().shapes.map((row: ShapesType, index: number): JSX.Element => {
+      return <OneShape index={index} store={props.store}/>
     })
     return shapes;
   }
 
   return (
-    renderShapes()    
+    <div id="work_space" className="right_part" onMouseDown={clickOnScreen}>
+      {renderShapes()}
+    </div>    
   );
 }
 

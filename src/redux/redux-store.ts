@@ -1,6 +1,6 @@
-import { createStore } from "redux";
-import stateReducer from "./state-reducer";
+import { createStore, Store } from "redux";
+import stateReducer, { StateType, ActionTypes } from "./state-reducer";
 
-let store = createStore(stateReducer);
+let store: Store<StateType, ActionTypes>  = createStore(stateReducer);
 
 export default store 
