@@ -67,14 +67,7 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
       return state;
   }
 }
-export type addShapeActionCreatorType = {
-  type: typeof ADD_SHAPE,
-  data: {
-    shapeType: ShapeType
-  }
-}
-
-export const addShapeActionCreator = (type: ShapeType): addShapeActionCreatorType => {
+export const addShapeActionCreator = (type: ShapeType) => {
   return {
     type: ADD_SHAPE,
     data: {
@@ -82,25 +75,13 @@ export const addShapeActionCreator = (type: ShapeType): addShapeActionCreatorTyp
     }
   }
 }
-
-export type removeShapeActionCreatorType = {
-  type: typeof REMOVE_SHAPE;
-} 
-
-export const removeShapeActionCreator = (): removeShapeActionCreatorType => {
+export const removeShapeActionCreator = () => {
   return {
     type: REMOVE_SHAPE
   }
 }
 
-export type setSelectionActionCreatorType = {
-  type: typeof SET_SELECTION,
-  data: {
-    shapeId: number | null, 
-  }
-}
-
-export const setSelectionActionCreator = (shapeId: number | null): setSelectionActionCreatorType => {
+export const setSelectionActionCreator = (shapeId: number | null) => {
   return {
     type: SET_SELECTION,
     data: {
@@ -108,15 +89,6 @@ export const setSelectionActionCreator = (shapeId: number | null): setSelectionA
     }
   }
 }
-
-export type setColorActionCreatorType = {
-  type: typeof SET_COLOR,
-    data: {
-      newFillColor: string,
-      newStrokeColor: string
-    }
-}
-
 export const setColorActionCreator = (newFillColor: string, newStrokeColor: string) => {
   return {
     type: SET_COLOR,
@@ -131,32 +103,37 @@ export type ActionTypes = ReturnType<PropertiesType<typeof actions>>;
 
 export type PropertiesType<T> = T extends { [key: string]: infer U} ? U: never;
 
-const actions = {
-  Ac1: (type: ShapeType) => ({
-    type: ADD_SHAPE,
-    data: {
-      shapeType: type
-    }
-  } as const),
-
-  Ac2: () => ({
-    type: REMOVE_SHAPE
-  } as const),
-
-  Ac3: (shapeId: number | null) => ({
-    type: SET_SELECTION,
-    data: {
-      shapeId: shapeId
-    }
-  } as const),
-
-  Ac4: (newFillColor: string, newStrokeColor: string) => ({
-    type: SET_COLOR,
-    data: {
-      newFillColor: newFillColor,
-      newStrokeColor: newStrokeColor
-    }
-  } as const)
+export const actions = {
+  addShapeActionCreator : (type: ShapeType) => {
+    return {
+      type: ADD_SHAPE,
+      data: {
+        shapeType: type
+      }
+    } as const
+  },
+  removeShapeActionCreator : () => {
+    return {
+      type: REMOVE_SHAPE
+    } as const
+  }, 
+  setSelectionActionCreator : (shapeId: number | null) => {
+    return {
+      type: SET_SELECTION,
+      data: {
+        shapeId: shapeId
+      }
+    } as const
+  },
+  setColorActionCreator : (newFillColor: string, newStrokeColor: string) => {
+    return {
+      type: SET_COLOR,
+      data: {
+        newFillColor: newFillColor,
+        newStrokeColor: newStrokeColor
+      }
+    } as const
+  }
 }
 
 export default stateReducer;

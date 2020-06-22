@@ -1,7 +1,7 @@
 import React, { useRef, Ref, useContext } from 'react';
 import rectangle from './../images/Rectangle2.png';
 import triangle from './../images/Polygon1.png';
-import { addShapeActionCreator, setColorActionCreator, StateType, ActionTypes } from '../redux/state-reducer';
+import { addShapeActionCreator, setColorActionCreator, StateType, ActionTypes, actions } from '../redux/state-reducer';
 import StoreContext from './StoreContext';
 import { Store } from 'redux';
 
@@ -28,13 +28,13 @@ const Tools = (): JSX.Element => {
         <div className="buttons_panel">
           <img 
             src={rectangle}
-            onClick={() => store.dispatch(addShapeActionCreator("rect"))}
+            onClick={() => store.dispatch(actions.addShapeActionCreator("rect"))}
             alt="rectangle"
             className="shape_button"
           />
           <img 
             src={triangle}
-            onClick={() => store.dispatch(addShapeActionCreator("triangle"))}
+            onClick={() => store.dispatch(actions.addShapeActionCreator("triangle"))}
             alt="triangle"
             className="shape_button"
           />

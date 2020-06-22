@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { ShapesType } from '../types';
-import { removeShapeActionCreator, setSelectionActionCreator, StateType, ActionTypes } from '../redux/state-reducer';
+import { removeShapeActionCreator, setSelectionActionCreator, StateType, ActionTypes, actions } from '../redux/state-reducer';
 import OneShape from './OneShape';
 import { Store } from 'redux';
 import StoreContext from './StoreContext';
@@ -12,13 +12,13 @@ const WorkSpace = (props: any): JSX.Element => {
   
   const clickOnScreen = (e: React.MouseEvent): void => {
     if (!e.defaultPrevented) {
-      store.dispatch(setSelectionActionCreator(null));
+      store.dispatch(actions.setSelectionActionCreator(null));
     }
   }
 
   const deleteShape = (e: KeyboardEvent): void => {
     if (e.keyCode === 46 && store.getState().selectedShapeId !== null) {
-      store.dispatch(removeShapeActionCreator())
+      store.dispatch(actions.removeShapeActionCreator())
     }
   }
   

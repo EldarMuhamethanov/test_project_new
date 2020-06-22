@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, Ref, MutableRefObject, useContext } from 'react'
 import { ShapesType, ViewBoxType, PositionShapeType } from '../types';
-import { setSelectionActionCreator, StateType, ActionTypes } from '../redux/state-reducer';
+import { setSelectionActionCreator, StateType, ActionTypes, actions } from '../redux/state-reducer';
 import { Store } from 'redux';
 import StoreContext from './StoreContext';
 
@@ -59,7 +59,7 @@ const OneShape = (props: any): JSX.Element => {
       refShape.current.firstChild.classList.add('grabbing');
       refShape.current.firstChild.classList.remove('grab');
       let indexShape: number = +refShape.current.dataset.id;
-      store.dispatch(setSelectionActionCreator(indexShape));
+      store.dispatch(actions.setSelectionActionCreator(indexShape));
       console.log(state.shapes[indexShape]);
     }
   }
