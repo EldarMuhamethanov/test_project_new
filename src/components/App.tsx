@@ -3,12 +3,12 @@ import Tools from './Tools';
 import WorkSpace from './WorkSpace';
 import store from '../redux/redux-store';
 
-const App = (props: any): JSX.Element => {
+const App = (): JSX.Element => {
   
   return (
     <div className="screen">
       <Tools />
-      <WorkSpace store={props.store} />
+      <WorkSpace />
     </div>
   );
 }

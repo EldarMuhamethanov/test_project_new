@@ -8,7 +8,7 @@ import App from './components/App';
 let rerenderEntireTree = (): void => {
   ReactDOM.render(
     <StoreContext.Provider value={store}>
-      < App store={store}/>
+      < App />
     </StoreContext.Provider>, document.getElementById("root"));
 };
 

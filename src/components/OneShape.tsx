@@ -1,24 +1,22 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, Ref, MutableRefObject, useContext } from 'react'
 import { ShapesType, ViewBoxType, PositionShapeType } from '../types';
 import { setSelectionActionCreator, StateType, ActionTypes } from '../redux/state-reducer';
 import { Store } from 'redux';
+import StoreContext from './StoreContext';
 
-type PropsType = {
-  index : number,
-  store : Store<StateType, ActionTypes>
-}
 
-const OneShape = (props: PropsType): JSX.Element => {
+const OneShape = (props: any): JSX.Element => {
 
-  const refShape: any = useRef(null);
-
+  const refShape: any = useRef();
+  const store: Store<StateType, ActionTypes> = useContext(StoreContext);
+  const state = store.getState();
   const mouseMove = (e: MouseEvent): void => {
     const cursorX: number = e.pageX;
     const cursorY: number = e.pageY;
     const windowWidth: number = window.innerWidth; 
     const windowHeight: number = window.innerHeight;
-    const shapeWidth: number = props.store.getState().shapes[props.index].width;
-    const shapeHeight: number = props.store.getState().shapes[props.index].height;
+    const shapeWidth: number = state.shapes[props.index].width;
+    const shapeHeight: number = state.shapes[props.index].height;
     if (cursorX <= windowWidth * 0.25 + shapeWidth / 2) {
       refShape.current.style.left = 0;
       refShape.current.style.top = cursorY - shapeHeight / 2;
@@ -42,12 +40,15 @@ const OneShape = (props: PropsType): JSX.Element => {
     document.body.removeEventListener('mouseup', mouseUp);
     refShape.current.firstChild.classList.remove('grabbing');
     refShape.current.firstChild.classList.add('grab');
-    let newShapes: Array<ShapesType> = props.store.getState().shapes.slice();
+    debugger
+    let newShapes: Array<ShapesType> = state.shapes.slice();
     let indexShape: number = +refShape.current.dataset.id;
-    console.log(props.store.getState().shapes[indexShape]);
+    debugger
+    console.log(state.shapes[indexShape]); // старое значение
     newShapes[indexShape].left = getComputedStyle(refShape.current).left;
     newShapes[indexShape].top = getComputedStyle(refShape.current).top;
-    console.log(props.store.getState().shapes[indexShape]);
+    debugger
+    console.log(state.shapes[indexShape]); // новое значение
   }
   
   const mouseDown = (e: React.MouseEvent): void => {
@@ -58,16 +59,16 @@ const OneShape = (props: PropsType): JSX.Element => {
       refShape.current.firstChild.classList.add('grabbing');
       refShape.current.firstChild.classList.remove('grab');
       let indexShape: number = +refShape.current.dataset.id;
-      props.store.dispatch(setSelectionActionCreator(indexShape));
-      console.log(props.store.getState().shapes[indexShape]);
+      store.dispatch(setSelectionActionCreator(indexShape));
+      console.log(state.shapes[indexShape]);
     }
   }
 
   useEffect(() => {
-    if (props.index === props.store.getState().selectedShapeId && refShape.current !== null) {
+    if (props.index === state.selectedShapeId && refShape.current !== null) {
       refShape.current.classList.remove('not_selected_shape');
       refShape.current.classList.add('selected_shape');
-    } else if (props.index !== props.store.getState().selectedShapeId && refShape.current !== null) {
+    } else if (props.index !== state.selectedShapeId && refShape.current !== null) {
       refShape.current.classList.add('not_selected_shape');
       refShape.current.classList.remove('selected_shape');
     }
@@ -75,7 +76,7 @@ const OneShape = (props: PropsType): JSX.Element => {
 
   const renderShape = (): JSX.Element => {
     const viewBox: ViewBoxType = [0, 0, 150, 100];
-    const row: ShapesType = props.store.getState().shapes[props.index];
+    const row: ShapesType = state.shapes[props.index];
     const index: string = props.index + "";
     let position: PositionShapeType = {
       top: row.top,

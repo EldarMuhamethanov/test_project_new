@@ -1,20 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { ShapesType } from '../types';
-import { removeShapeActionCreator, setSelectionActionCreator } from '../redux/state-reducer';
+import { removeShapeActionCreator, setSelectionActionCreator, StateType, ActionTypes } from '../redux/state-reducer';
 import OneShape from './OneShape';
+import { Store } from 'redux';
+import StoreContext from './StoreContext';
 
 
 const WorkSpace = (props: any): JSX.Element => {
   
+  const store: Store<StateType, ActionTypes> = useContext(StoreContext);
+  
   const clickOnScreen = (e: React.MouseEvent): void => {
     if (!e.defaultPrevented) {
-      props.store.dispatch(setSelectionActionCreator(null));
+      store.dispatch(setSelectionActionCreator(null));
     }
   }
 
   const deleteShape = (e: KeyboardEvent): void => {
-    if (e.keyCode === 46 && props.store.getState().selectedShapeId !== null) {
-      props.store.dispatch(removeShapeActionCreator())
+    if (e.keyCode === 46 && store.getState().selectedShapeId !== null) {
+      store.dispatch(removeShapeActionCreator())
     }
   }
   
@@ -25,9 +29,9 @@ const WorkSpace = (props: any): JSX.Element => {
     }
   })
   
-  const renderShapes = (): JSX.Element=> { 
-    const shapes: JSX.Element = props.store.getState().shapes.map((row: ShapesType, index: number): JSX.Element => {
-      return <OneShape index={index} store={props.store}/>
+  const renderShapes = (): Array<JSX.Element> => { 
+    const shapes: Array<JSX.Element> = store.getState().shapes.map((row: ShapesType, index: number): JSX.Element => {
+      return <OneShape index={index} />
     })
     return shapes;
   }
