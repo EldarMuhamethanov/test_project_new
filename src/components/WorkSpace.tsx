@@ -1,14 +1,15 @@
 import React, { useEffect, useContext } from 'react';
 import { ShapesType } from '../types';
-import { removeShapeActionCreator, setSelectionActionCreator, StateType, ActionTypes, actions } from '../redux/state-reducer';
+import { StateType, ActionTypes, actions } from '../redux/state-reducer';
 import OneShape from './OneShape';
 import { Store } from 'redux';
 import StoreContext from './StoreContext';
+import { StoreType } from '../redux/redux-store';
 
 
-const WorkSpace = (props: any): JSX.Element => {
+const WorkSpace = (): JSX.Element => {
   
-  const store: Store<StateType, ActionTypes> = useContext(StoreContext);
+  const store: StoreType = useContext(StoreContext);
   
   const clickOnScreen = (e: React.MouseEvent): void => {
     if (!e.defaultPrevented) {

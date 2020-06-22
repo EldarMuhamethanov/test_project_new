@@ -1,10 +1,5 @@
 import { ShapesType, ShapeType } from "../types";
 
-const ADD_SHAPE = "ADD_SHAPE";
-const REMOVE_SHAPE = 'REMOVE_SHAPE';
-const SET_SELECTION = 'SET_SELECTION';
-const SET_COLOR = 'SET_COLOR';
-
 export type StateType = typeof initialState;
 
 let initialState = {
@@ -23,7 +18,7 @@ if (localStorage.getItem("state") !== null) {
 const stateReducer = (state = initialState, action: ActionTypes): StateType => {
   let newShapes: Array<ShapesType>;
   switch (action.type) {
-    case ADD_SHAPE:
+    case "ADD_SHAPE":
       newShapes = state.shapes.slice();
       const width: number = 150;
       const height: number = 100;
@@ -42,7 +37,7 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
       localStorage.setItem("state", JSON.stringify({ ...state, shapes: newShapes}));
       return { ...state, shapes: newShapes};
     
-    case REMOVE_SHAPE:
+    case 'REMOVE_SHAPE':
       newShapes = state.shapes.slice();
       if (state.selectedShapeId !== null) {
         newShapes.splice(+state.selectedShapeId, 1);
@@ -50,11 +45,11 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
       localStorage.setItem("state", JSON.stringify({ ...state, shapes: newShapes, selectedShapeId: null}));
       return { ...state, shapes: newShapes, selectedShapeId: null};
     
-    case SET_SELECTION:
+    case 'SET_SELECTION':
       localStorage.setItem("state", JSON.stringify({ ...state, selectedShapeId: action.data.shapeId}));
       return { ...state, selectedShapeId: action.data.shapeId};
     
-    case SET_COLOR:
+    case 'SET_COLOR':
       if (state.selectedShapeId !== null) {
         state.shapes[state.selectedShapeId].fillColor = action.data.newFillColor;
         state.shapes[state.selectedShapeId].strokeColor = action.data.newStrokeColor;
@@ -67,37 +62,6 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
       return state;
   }
 }
-export const addShapeActionCreator = (type: ShapeType) => {
-  return {
-    type: ADD_SHAPE,
-    data: {
-      shapeType: type
-    }
-  }
-}
-export const removeShapeActionCreator = () => {
-  return {
-    type: REMOVE_SHAPE
-  }
-}
-
-export const setSelectionActionCreator = (shapeId: number | null) => {
-  return {
-    type: SET_SELECTION,
-    data: {
-      shapeId: shapeId
-    }
-  }
-}
-export const setColorActionCreator = (newFillColor: string, newStrokeColor: string) => {
-  return {
-    type: SET_COLOR,
-    data: {
-      newFillColor: newFillColor,
-      newStrokeColor: newStrokeColor
-    }
-  } as const
-}
 
 export type ActionTypes = ReturnType<PropertiesType<typeof actions>>;
 
@@ -106,7 +70,7 @@ export type PropertiesType<T> = T extends { [key: string]: infer U} ? U: never;
 export const actions = {
   addShapeActionCreator : (type: ShapeType) => {
     return {
-      type: ADD_SHAPE,
+      type: 'ADD_SHAPE',
       data: {
         shapeType: type
       }
@@ -114,12 +78,12 @@ export const actions = {
   },
   removeShapeActionCreator : () => {
     return {
-      type: REMOVE_SHAPE
+      type: 'REMOVE_SHAPE'
     } as const
   }, 
   setSelectionActionCreator : (shapeId: number | null) => {
     return {
-      type: SET_SELECTION,
+      type: 'SET_SELECTION',
       data: {
         shapeId: shapeId
       }
@@ -127,7 +91,7 @@ export const actions = {
   },
   setColorActionCreator : (newFillColor: string, newStrokeColor: string) => {
     return {
-      type: SET_COLOR,
+      type: 'SET_COLOR',
       data: {
         newFillColor: newFillColor,
         newStrokeColor: newStrokeColor

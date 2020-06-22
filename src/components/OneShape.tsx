@@ -1,15 +1,16 @@
-import React, { useRef, useEffect, Ref, MutableRefObject, useContext } from 'react'
+import React, { useRef, useEffect, useContext } from 'react'
 import { ShapesType, ViewBoxType, PositionShapeType } from '../types';
-import { setSelectionActionCreator, StateType, ActionTypes, actions } from '../redux/state-reducer';
+import {  StateType, ActionTypes, actions } from '../redux/state-reducer';
 import { Store } from 'redux';
 import StoreContext from './StoreContext';
+import { StoreType } from '../redux/redux-store';
 
-
-const OneShape = (props: any): JSX.Element => {
+const OneShape = (props: {index: number}): JSX.Element => {
 
   const refShape: any = useRef();
-  const store: Store<StateType, ActionTypes> = useContext(StoreContext);
-  const state = store.getState();
+  const store: StoreType = useContext(StoreContext);
+  const state = { ...store.getState() };
+
   const mouseMove = (e: MouseEvent): void => {
     const cursorX: number = e.pageX;
     const cursorY: number = e.pageY;
@@ -41,7 +42,7 @@ const OneShape = (props: any): JSX.Element => {
     refShape.current.firstChild.classList.remove('grabbing');
     refShape.current.firstChild.classList.add('grab');
     debugger
-    let newShapes: Array<ShapesType> = state.shapes.slice();
+    const newShapes: Array<ShapesType> = [ ...state.shapes ];
     let indexShape: number = +refShape.current.dataset.id;
     debugger
     console.log(state.shapes[indexShape]); // старое значение

@@ -1,6 +1,10 @@
 import { createStore, Store } from "redux";
 import stateReducer, { StateType, ActionTypes } from "./state-reducer";
 
-let store: Store<StateType, ActionTypes>  = createStore(stateReducer);
+let store = createStore(stateReducer);
+
+
+export type StoreType = typeof store;
+
 
 export default store 

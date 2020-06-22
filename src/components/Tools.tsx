@@ -1,23 +1,23 @@
 import React, { useRef, Ref, useContext } from 'react';
 import rectangle from './../images/Rectangle2.png';
 import triangle from './../images/Polygon1.png';
-import { addShapeActionCreator, setColorActionCreator, StateType, ActionTypes, actions } from '../redux/state-reducer';
+import { actions } from '../redux/state-reducer';
 import StoreContext from './StoreContext';
-import { Store } from 'redux';
+import { StoreType } from '../redux/redux-store';
 
 const Tools = (): JSX.Element => {
 
   
   const fillColorPicker: Ref<HTMLInputElement> = useRef(null);
   const strokeColorPicker: Ref<HTMLInputElement> = useRef(null);
-  const store: Store<StateType, ActionTypes> = useContext(StoreContext);
+  const store: StoreType = useContext(StoreContext);
   
   const changeShapeColor = (): void => {
     debugger;
     if (store.getState().selectedShapeId !== null && fillColorPicker.current && strokeColorPicker.current) {
       const newFillColor: string = fillColorPicker.current.value;
       const newStrokeColor: string = strokeColorPicker.current.value;
-      store.dispatch(setColorActionCreator(newFillColor, newStrokeColor))
+      store.dispatch(actions.setColorActionCreator(newFillColor, newStrokeColor))
     }
   }
 
