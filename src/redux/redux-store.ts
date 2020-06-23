@@ -1,5 +1,5 @@
-import { createStore, Store } from "redux";
-import stateReducer, { StateType, ActionTypes } from "./state-reducer";
+import { createStore } from "redux";
+import stateReducer from "./state-reducer";
 
 let store = createStore(stateReducer);
 

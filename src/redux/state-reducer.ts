@@ -18,14 +18,13 @@ if (localStorage.getItem("state") !== null) {
 const stateReducer = (state = initialState, action: ActionTypes): StateType => {
   let newShapes: Array<ShapesType>;
   switch (action.type) {
-    case "ADD_SHAPE":
+    case 'ADD_SHAPE':
       newShapes = state.shapes.slice();
       const width: number = 150;
       const height: number = 100;
       newShapes = newShapes.concat([
         {
           type: action.data.shapeType === 'rect' ? 'rect' : 'triangle',
-          //id: state.shapes.length,
           left: "calc(50% - " + width / 2 + "px)",
           top: "calc(50% - " + height / 2 + "px)",
           fillColor: "#000000",
@@ -56,6 +55,13 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
       }
       localStorage.setItem("state", JSON.stringify(state));
       return state;
+    
+    case 'SET_POSITION':
+      newShapes = [...state.shapes];
+      newShapes[action.data.shapeIndex].left = action.data.left;
+      newShapes[action.data.shapeIndex].top = action.data.top;
+      localStorage.setItem("state", JSON.stringify({ ...state, shapes: newShapes}));
+      return { ...state, shapes: newShapes };
     
     default:
       localStorage.setItem("state", JSON.stringify(state));
@@ -95,6 +101,16 @@ export const actions = {
       data: {
         newFillColor: newFillColor,
         newStrokeColor: newStrokeColor
+      }
+    } as const
+  },
+  setPositionActionCreator: (shapeIndex: number, shapeX: string, shapeY: string) => {
+    return {
+      type: 'SET_POSITION',
+      data: {
+        shapeIndex: shapeIndex,
+        left: shapeX,
+        top: shapeY,
       }
     } as const
   }

@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useContext } from 'react'
 import { ShapesType, ViewBoxType, PositionShapeType } from '../types';
-import {  StateType, ActionTypes, actions } from '../redux/state-reducer';
-import { Store } from 'redux';
+import { actions } from '../redux/state-reducer';
 import StoreContext from './StoreContext';
 import { StoreType } from '../redux/redux-store';
 
@@ -34,6 +33,7 @@ const OneShape = (props: {index: number}): JSX.Element => {
       refShape.current.style.left = e.pageX - windowWidth * 0.25 - shapeWidth / 2;
       refShape.current.style.top = e.pageY - shapeHeight / 2;
     }
+    store.dispatch(actions.setPositionActionCreator(props.index, getComputedStyle(refShape.current).left, getComputedStyle(refShape.current).top));
   }
 
   const mouseUp = (): void => {
@@ -41,15 +41,9 @@ const OneShape = (props: {index: number}): JSX.Element => {
     document.body.removeEventListener('mouseup', mouseUp);
     refShape.current.firstChild.classList.remove('grabbing');
     refShape.current.firstChild.classList.add('grab');
-    debugger
-    const newShapes: Array<ShapesType> = [ ...state.shapes ];
-    let indexShape: number = +refShape.current.dataset.id;
-    debugger
-    console.log(state.shapes[indexShape]); // старое значение
-    newShapes[indexShape].left = getComputedStyle(refShape.current).left;
-    newShapes[indexShape].top = getComputedStyle(refShape.current).top;
-    debugger
-    console.log(state.shapes[indexShape]); // новое значение
+    console.log(store.getState().shapes[props.index]);;
+    store.dispatch(actions.setPositionActionCreator(props.index, getComputedStyle(refShape.current).left, getComputedStyle(refShape.current).top));
+    console.log(store.getState().shapes[props.index]);
   }
   
   const mouseDown = (e: React.MouseEvent): void => {
@@ -59,9 +53,8 @@ const OneShape = (props: {index: number}): JSX.Element => {
       document.body.addEventListener('mouseup', mouseUp);
       refShape.current.firstChild.classList.add('grabbing');
       refShape.current.firstChild.classList.remove('grab');
-      let indexShape: number = +refShape.current.dataset.id;
-      store.dispatch(actions.setSelectionActionCreator(indexShape));
-      console.log(state.shapes[indexShape]);
+      store.dispatch(actions.setSelectionActionCreator(props.index));
+      console.log(state.shapes[props.index]);
     }
   }
 

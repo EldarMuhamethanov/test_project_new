@@ -1,8 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { ShapesType } from '../types';
-import { StateType, ActionTypes, actions } from '../redux/state-reducer';
+import { actions } from '../redux/state-reducer';
 import OneShape from './OneShape';
-import { Store } from 'redux';
 import StoreContext from './StoreContext';
 import { StoreType } from '../redux/redux-store';
 
