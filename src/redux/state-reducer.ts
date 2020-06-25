@@ -16,13 +16,15 @@ if (localStorage.getItem("state") !== null) {
 }
 
 const stateReducer = (state = initialState, action: ActionTypes): StateType => {
-  let newShapes: Array<ShapesType>;
+  let newState = { ...state };
+  newState.shapes = [...state.shapes];
   switch (action.type) {
     case 'ADD_SHAPE':
-      newShapes = state.shapes.slice();
+      // newShapes = state.shapes.slice();
+      
       const width: number = 150;
       const height: number = 100;
-      newShapes = newShapes.concat([
+      newState.shapes = newState.shapes.concat([
         {
           type: action.data.shapeType === 'rect' ? 'rect' : 'triangle',
           left: "calc(50% - " + width / 2 + "px)",
@@ -33,40 +35,32 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
           height: height,
         }
       ]);
-      localStorage.setItem("state", JSON.stringify({ ...state, shapes: newShapes}));
-      return { ...state, shapes: newShapes};
+      break;
     
     case 'REMOVE_SHAPE':
-      newShapes = state.shapes.slice();
-      if (state.selectedShapeId !== null) {
-        newShapes.splice(+state.selectedShapeId, 1);
-      }
-      localStorage.setItem("state", JSON.stringify({ ...state, shapes: newShapes, selectedShapeId: null}));
-      return { ...state, shapes: newShapes, selectedShapeId: null};
+      newState.shapes.splice(Number(newState.selectedShapeId), 1);
+      newState.selectedShapeId = null;
+      break;
     
     case 'SET_SELECTION':
-      localStorage.setItem("state", JSON.stringify({ ...state, selectedShapeId: action.data.shapeId}));
-      return { ...state, selectedShapeId: action.data.shapeId};
+      newState.selectedShapeId = action.data.shapeId;
+      break;
     
     case 'SET_COLOR':
-      if (state.selectedShapeId !== null) {
-        state.shapes[state.selectedShapeId].fillColor = action.data.newFillColor;
-        state.shapes[state.selectedShapeId].strokeColor = action.data.newStrokeColor;
-      }
-      localStorage.setItem("state", JSON.stringify(state));
-      return state;
+      newState.shapes[Number(newState.selectedShapeId)].fillColor = action.data.newFillColor;
+      newState.shapes[Number(newState.selectedShapeId)].strokeColor = action.data.newStrokeColor;
+      break;
     
     case 'SET_POSITION':
-      newShapes = [...state.shapes];
-      newShapes[action.data.shapeIndex].left = action.data.left;
-      newShapes[action.data.shapeIndex].top = action.data.top;
-      localStorage.setItem("state", JSON.stringify({ ...state, shapes: newShapes}));
-      return { ...state, shapes: newShapes };
+      newState.shapes[action.data.shapeIndex].left = action.data.left;
+      newState.shapes[action.data.shapeIndex].top = action.data.top;
+      break;
     
     default:
-      localStorage.setItem("state", JSON.stringify(state));
-      return state;
+      break;
   }
+  localStorage.setItem("state", JSON.stringify(newState));
+  return newState;
 }
 
 export type ActionTypes = ReturnType<PropertiesType<typeof actions>>;

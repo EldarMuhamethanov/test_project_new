@@ -10,7 +10,7 @@ const Tools = (): JSX.Element => {
   
   const fillColorPicker: Ref<HTMLInputElement> = useRef(null);
   const strokeColorPicker: Ref<HTMLInputElement> = useRef(null);
-  const store: StoreType = useContext(StoreContext);
+  const store: Readonly<StoreType> = useContext(StoreContext);
   
   const changeShapeColor = (): void => {
     debugger;
@@ -20,7 +20,8 @@ const Tools = (): JSX.Element => {
       store.dispatch(actions.setColorActionCreator(newFillColor, newStrokeColor))
     }
   }
-
+  debugger;
+  console.log(store.getState().selectedShapeId);
   return (
     <div id="tool_panel" className="left_part">
       <div className="select_new_shape">

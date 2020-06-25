@@ -8,7 +8,7 @@ import { StoreType } from '../redux/redux-store';
 
 const WorkSpace = (): JSX.Element => {
   
-  const store: StoreType = useContext(StoreContext);
+  const store: Readonly<StoreType> = useContext(StoreContext);
   
   const clickOnScreen = (e: React.MouseEvent): void => {
     if (!e.defaultPrevented) {
