@@ -1,5 +1,3 @@
-// type вынести в enum
-
 export type ShapesType = {
   left: string,
   top: string,
@@ -8,7 +6,7 @@ export type ShapesType = {
   strokeColor: string,
   width: number,
   height: number,
-  //id: number,
+  id: number,
 }
 
 export type ShapeType = "rect" | "triangle";

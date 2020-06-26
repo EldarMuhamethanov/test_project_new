@@ -1,5 +1,6 @@
 import React from 'react';
+import { StoreType } from '../redux/redux-store';
 
-const StoreContext: any = React.createContext(null);
+const StoreContext: React.Context<any> = React.createContext(null);
 
 export default StoreContext;

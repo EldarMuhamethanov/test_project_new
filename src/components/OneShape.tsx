@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext } from 'react'
+import React, { useRef, useEffect, useContext, Ref } from 'react'
 import { ShapesType, ViewBoxType, PositionShapeType } from '../types';
 import { actions, StateType } from '../redux/state-reducer';
 import StoreContext from './StoreContext';
@@ -6,7 +6,7 @@ import { StoreType } from '../redux/redux-store';
 
 const OneShape = (props: Readonly<{ index: number }>): JSX.Element => {
 
-  const refShape: any = useRef(null);
+  const refShape: Ref<any> = useRef(null);
   const store: Readonly<StoreType> = useContext(StoreContext);
   const state: Readonly<StateType> = { ...store.getState() };
 
@@ -17,24 +17,17 @@ const OneShape = (props: Readonly<{ index: number }>): JSX.Element => {
     const windowHeight: number = window.innerHeight;
     const shapeWidth: number = state.shapes[props.index].width;
     const shapeHeight: number = state.shapes[props.index].height;
-    // if (refShape.current)
     if (cursorX <= windowWidth * 0.25 + shapeWidth / 2) {
-      refShape.current.style.left = 0;
-      refShape.current.style.top = cursorY - shapeHeight / 2;
+      store.dispatch(actions.setPositionActionCreator(props.index, String(0), String(cursorY - shapeHeight / 2)));
     } else if (cursorX >= windowWidth - shapeWidth / 2) {
-      refShape.current.style.left = windowWidth * 0.745 - shapeWidth;
-      refShape.current.style.top = cursorY - shapeHeight / 2;
+      store.dispatch(actions.setPositionActionCreator(props.index, String(windowWidth * 0.745 - shapeWidth), String(cursorY - shapeHeight / 2)));
     } else if (cursorY >= windowHeight - shapeHeight / 2){
-      refShape.current.style.left = cursorX - windowWidth * 0.25 -shapeWidth / 2;
-      refShape.current.style.top = windowHeight - shapeHeight - 4;
+      store.dispatch(actions.setPositionActionCreator(props.index, String(cursorX - windowWidth * 0.25 -shapeWidth / 2), String(windowHeight - shapeHeight - 4)));
     } else if (cursorY <= shapeHeight / 2) {
-      refShape.current.style.left = cursorX - windowWidth * 0.25 -shapeWidth / 2;
-      refShape.current.style.top = 0;
+      store.dispatch(actions.setPositionActionCreator(props.index, String(cursorX - windowWidth * 0.25 -shapeWidth / 2), String(0)));
     } else {
-      refShape.current.style.left = e.pageX - windowWidth * 0.25 - shapeWidth / 2;
-      refShape.current.style.top = e.pageY - shapeHeight / 2;
+      store.dispatch(actions.setPositionActionCreator(props.index, String(cursorX - windowWidth * 0.25 - shapeWidth / 2), String(cursorY - shapeHeight / 2)));
     }
-    store.dispatch(actions.setPositionActionCreator(props.index, getComputedStyle(refShape.current).left, getComputedStyle(refShape.current).top));
   }
 
   const mouseUp = (): void => {
@@ -42,7 +35,6 @@ const OneShape = (props: Readonly<{ index: number }>): JSX.Element => {
     document.body.removeEventListener('mouseup', mouseUp);
     refShape.current.firstChild.classList.remove('grabbing');
     refShape.current.firstChild.classList.add('grab');
-    store.dispatch(actions.setPositionActionCreator(props.index, getComputedStyle(refShape.current).left, getComputedStyle(refShape.current).top));
   }
   
   const mouseDown = (e: React.MouseEvent): void => {
@@ -69,7 +61,7 @@ const OneShape = (props: Readonly<{ index: number }>): JSX.Element => {
   const renderShape = (): JSX.Element => {
     const viewBox: ViewBoxType = [0, 0, 150, 100];
     const row: ShapesType = state.shapes[props.index];
-    const index: string = props.index + "";
+    const index: string = String(props.index);
     let position: PositionShapeType = {
       top: row.top,
       left: row.left,
@@ -84,21 +76,21 @@ const OneShape = (props: Readonly<{ index: number }>): JSX.Element => {
           data-id={index}
           className="shape"
           style={position}
-          viewBox={"" + viewBox}
+          viewBox={String(viewBox)}
           ref={refShape}
           onMouseDown={mouseDown}
         >
-            <rect 
-              x="0"
-              y="0"
-              width={row.width}
-              height={row.height}
-              className="grab"
-              fill={row.fillColor}
-              stroke={row.strokeColor}
-              strokeWidth="5"
-              onMouseDown={mouseDown}
-            />
+          <rect 
+            x="0"
+            y="0"
+            width={row.width}
+            height={row.height}
+            className="grab"
+            fill={row.fillColor}
+            stroke={row.strokeColor}
+            strokeWidth="5"
+            onMouseDown={mouseDown}
+          />
         </svg>
       )
     }
@@ -110,7 +102,7 @@ const OneShape = (props: Readonly<{ index: number }>): JSX.Element => {
           key={index}
           className="shape"
           style={ position }
-          viewBox={"" + viewBox}
+          viewBox={String(viewBox)}
           id={"svg" + index}
           data-id={index}
           ref={refShape}

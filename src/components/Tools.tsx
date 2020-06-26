@@ -13,15 +13,12 @@ const Tools = (): JSX.Element => {
   const store: Readonly<StoreType> = useContext(StoreContext);
   
   const changeShapeColor = (): void => {
-    debugger;
     if (store.getState().selectedShapeId !== null && fillColorPicker.current && strokeColorPicker.current) {
       const newFillColor: string = fillColorPicker.current.value;
       const newStrokeColor: string = strokeColorPicker.current.value;
       store.dispatch(actions.setColorActionCreator(newFillColor, newStrokeColor))
     }
   }
-  debugger;
-  console.log(store.getState().selectedShapeId);
   return (
     <div id="tool_panel" className="left_part">
       <div className="select_new_shape">

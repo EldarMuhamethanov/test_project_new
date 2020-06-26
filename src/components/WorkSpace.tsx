@@ -30,10 +30,10 @@ const WorkSpace = (): JSX.Element => {
   })
   
   const renderShapes = (): Array<JSX.Element> => { 
-    const shapes: Array<JSX.Element> = store.getState().shapes.map((row: ShapesType, index: number): JSX.Element => {
+    const shapesJSX: Array<JSX.Element> = store.getState().shapes.map((row: ShapesType, index: number): JSX.Element => {
       return <OneShape index={index} />
     })
-    return shapes;
+    return shapesJSX;
   }
 
   return (

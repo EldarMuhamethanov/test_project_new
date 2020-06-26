@@ -19,9 +19,7 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
   let newState = { ...state };
   newState.shapes = [...state.shapes];
   switch (action.type) {
-    case 'ADD_SHAPE':
-      // newShapes = state.shapes.slice();
-      
+    case 'ADD_SHAPE':      
       const width: number = 150;
       const height: number = 100;
       newState.shapes = newState.shapes.concat([
@@ -33,6 +31,7 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
           strokeColor: "#000000",
           width: width,
           height: height,
+          id: newState.shapes.length
         }
       ]);
       break;
