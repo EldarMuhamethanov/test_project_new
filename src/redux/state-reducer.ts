@@ -24,7 +24,7 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
       const height: number = 100;
       newState.shapes = newState.shapes.concat([
         {
-          type: action.data.shapeType === 'rect' ? 'rect' : 'triangle',
+          type: action.data.shapeType,
           left: "calc(50% - " + width / 2 + "px)",
           top: "calc(50% - " + height / 2 + "px)",
           fillColor: "#000000",
@@ -43,6 +43,14 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
     
     case 'SET_SELECTION':
       newState.selectedShapeId = action.data.shapeId;
+      if (newState.selectedShapeId !== null) {
+        let node: HTMLElement | null = document.getElementById("svg" + action.data.shapeId);
+        if (node !== null && node.parentNode !== null) {
+          let parent = node.parentNode;
+          let shape = parent.removeChild(node);
+          parent.append(shape);
+        }
+      }
       break;
     
     case 'SET_COLOR':

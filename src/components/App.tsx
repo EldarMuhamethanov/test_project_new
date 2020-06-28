@@ -5,7 +5,7 @@ import WorkSpace from './WorkSpace';
 const App = (): JSX.Element => {
   
   return (
-    <div className="screen">
+    <div className="screen" id="screen">
       <Tools />
       <WorkSpace />
     </div>

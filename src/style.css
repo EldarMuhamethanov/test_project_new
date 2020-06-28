@@ -69,9 +69,10 @@ body
 {
   cursor: pointer;
 }
-.shape
+.shape_svg
 {
   position: absolute;
+  pointer-events: all;
 }
 polygon:hover,
 rect:hover
@@ -81,7 +82,7 @@ rect:hover
 
 .selected_shape
 {
-  border: 2px dashed red;
+  border: 2px dashed #2F80ED
 }
 .not_selected_shape
 {

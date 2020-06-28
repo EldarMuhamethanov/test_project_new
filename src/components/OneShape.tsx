@@ -6,7 +6,7 @@ import { StoreType } from '../redux/redux-store';
 
 const OneShape = (props: Readonly<{ index: number }>): JSX.Element => {
 
-  const refShape: Ref<any> = useRef(null);
+  const refShape: React.Ref<any> = useRef(null);
   const store: Readonly<StoreType> = useContext(StoreContext);
   const state: Readonly<StateType> = { ...store.getState() };
 
@@ -38,13 +38,45 @@ const OneShape = (props: Readonly<{ index: number }>): JSX.Element => {
   }
   
   const mouseDown = (e: React.MouseEvent): void => {
+    e.preventDefault();
+    document.body.addEventListener('mousemove', mouseMove);
+    document.body.addEventListener('mouseup', mouseUp);
+    refShape.current.firstChild.classList.add('grabbing');
+    refShape.current.firstChild.classList.remove('grab');
+    store.dispatch(actions.setSelectionActionCreator(props.index));
+  }
+
+  const getRelativePointerСoordinates = (e: React.MouseEvent, parent: string): [number, number] => {
+    let workSpace: HTMLElement | null ;
+    if (workSpace= document.getElementById(parent)) {
+      let targetCoords = workSpace.getBoundingClientRect();
+      let xCoord = e.clientX - targetCoords.left;
+      let yCoord = e.clientY - targetCoords.top;
+      return [xCoord, yCoord];
+    } 
+    return [0, 0];
+  }
+
+  const triangleFreeZoneClick = (e: React.MouseEvent): void => {
     if (!e.defaultPrevented) {
+      let pointerX: number;
+      let pointerY: number;
+      [pointerX, pointerY] = getRelativePointerСoordinates(e, "work_space");
+      for (let i = 0; i < state.shapes.length; i++) {
+        if (i === state.selectedShapeId) {
+          continue
+        }
+        let currShape = state.shapes[i];
+        let leftEdge = Number(currShape.left);
+        let rightEdge = Number(currShape.left) + Number(currShape.width);
+        let topEdge = Number(currShape.top);
+        let bottomEdge = Number(currShape.top) + Number(currShape.height);
+        if (leftEdge < pointerX && rightEdge > pointerX && topEdge < pointerY && bottomEdge > pointerY) {
+          store.dispatch(actions.setSelectionActionCreator(i));
+          break;
+        }
+      }
       e.preventDefault();
-      document.body.addEventListener('mousemove', mouseMove);
-      document.body.addEventListener('mouseup', mouseUp);
-      refShape.current.firstChild.classList.add('grabbing');
-      refShape.current.firstChild.classList.remove('grab');
-      store.dispatch(actions.setSelectionActionCreator(props.index));
     }
   }
 
@@ -60,58 +92,58 @@ const OneShape = (props: Readonly<{ index: number }>): JSX.Element => {
 
   const renderShape = (): JSX.Element => {
     const viewBox: ViewBoxType = [0, 0, 150, 100];
-    const row: ShapesType = state.shapes[props.index];
+    const currShape: ShapesType = state.shapes[props.index];
     const index: string = String(props.index);
     let position: PositionShapeType = {
-      top: row.top,
-      left: row.left,
+      top: currShape.top,
+      left: currShape.left,
     }
-    if (row.type === 'rect') {
+    if (currShape.type === 'rect') {
       return (
         <svg 
-          width={row.width}
-          height={row.height}
+          width={currShape.width}
+          height={currShape.height}
           key={index}
           id={'svg' + index}
           data-id={index}
-          className="shape"
+          className="shape_svg"
           style={position}
           viewBox={String(viewBox)}
           ref={refShape}
-          onMouseDown={mouseDown}
         >
           <rect 
             x="0"
             y="0"
-            width={row.width}
-            height={row.height}
-            className="grab"
-            fill={row.fillColor}
-            stroke={row.strokeColor}
+            width={currShape.width}
+            height={currShape.height}
+            className="shape grab"
+            fill={currShape.fillColor}
+            stroke={currShape.strokeColor}
             strokeWidth="5"
             onMouseDown={mouseDown}
           />
         </svg>
       )
     }
-    if (row.type === 'triangle') {
+    if (currShape.type === 'triangle') {
       return (
         <svg
-          width={row.width}
-          height={row.height} 
+          width={currShape.width}
+          height={currShape.height}
           key={index}
-          className="shape"
-          style={ position }
+          className="shape_svg"
+          style={position}
           viewBox={String(viewBox)}
           id={"svg" + index}
           data-id={index}
           ref={refShape}
+          onMouseDown={triangleFreeZoneClick}
           >
             <polygon 
               points="5,98 70,5 145,98"
-              className="grab" 
-              fill={row.fillColor} 
-              stroke={row.strokeColor} 
+              className="shape grab"
+              fill={currShape.fillColor} 
+              stroke={currShape.strokeColor} 
               strokeWidth="5"
               onMouseDown={mouseDown}
             />
