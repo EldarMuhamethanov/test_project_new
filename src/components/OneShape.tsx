@@ -62,8 +62,8 @@ const OneShape = (props: Readonly<{ index: number }>): JSX.Element => {
       let pointerX: number;
       let pointerY: number;
       [pointerX, pointerY] = getRelativePointerСoordinates(e, "work_space");
-      for (let i = 0; i < state.shapes.length; i++) {
-        if (i === state.selectedShapeId) {
+      for (let i = state.shapes.length - 1; i >= 0; i--) {
+        if (i === props.index) {
           continue
         }
         let currShape = state.shapes[i];
