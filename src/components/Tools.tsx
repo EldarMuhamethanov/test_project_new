@@ -10,15 +10,25 @@ const Tools = (): JSX.Element => {
   
   const fillColorPicker: Ref<HTMLInputElement> = useRef(null);
   const strokeColorPicker: Ref<HTMLInputElement> = useRef(null);
+  
   const store: Readonly<StoreType> = useContext(StoreContext);
+
+  const {
+    shapes,
+    selectedShapeId
+  } = store.getState();
+
+  let fillColor = (selectedShapeId !== null) ? (shapes[Number(selectedShapeId)].fillColor) : '#000000';
+  let strokeColor = (selectedShapeId !== null) ? (shapes[Number(selectedShapeId)].strokeColor) : '#000000';
   
   const changeShapeColor = (): void => {
-    if (store.getState().selectedShapeId !== null && fillColorPicker.current && strokeColorPicker.current) {
+    if (selectedShapeId !== null && fillColorPicker.current && strokeColorPicker.current) {
       const newFillColor: string = fillColorPicker.current.value;
       const newStrokeColor: string = strokeColorPicker.current.value;
-      store.dispatch(actions.setColorActionCreator(newFillColor, newStrokeColor))
+      store.dispatch(actions.setColor(newFillColor, newStrokeColor))
     }
   }
+
   return (
     <div id="tool_panel" className="left_part">
       <div className="select_new_shape">
@@ -26,13 +36,13 @@ const Tools = (): JSX.Element => {
         <div className="buttons_panel">
           <img 
             src={rectangle}
-            onClick={() => store.dispatch(actions.addShapeActionCreator("rect"))}
+            onClick={() => store.dispatch(actions.addShape("rect"))}
             alt="rectangle"
             className="shape_button"
           />
           <img 
             src={triangle}
-            onClick={() => store.dispatch(actions.addShapeActionCreator("triangle"))}
+            onClick={() => store.dispatch(actions.addShape("triangle"))}
             alt="triangle"
             className="shape_button"
           />
@@ -44,18 +54,18 @@ const Tools = (): JSX.Element => {
         <div className="style_block">
           <label>Fill</label>
           <input
-            ref={fillColorPicker} disabled={store.getState().selectedShapeId == null}
+            ref={fillColorPicker} disabled={selectedShapeId === null}
             type="color" id="fill_color" className="color_picker"
-            value={store.getState().selectedShapeId !== null ? store.getState().shapes[Number(store.getState().selectedShapeId)].fillColor : '#000000'}
-            onChange={() => changeShapeColor()} />          
+            value={fillColor}
+            onChange={changeShapeColor} />          
         </div>
         <div className="style_block">
           <label>Stroke</label>
           <input
-            ref={strokeColorPicker} disabled={store.getState().selectedShapeId == null}
+            ref={strokeColorPicker} disabled={selectedShapeId === null}
             type="color" id="stroke_color" className="color_picker"
-            value={store.getState().selectedShapeId !== null ? store.getState().shapes[Number(store.getState().selectedShapeId)].strokeColor : '#000000'}
-            onChange={() => changeShapeColor()} />          
+            value={strokeColor}
+            onChange={changeShapeColor} />          
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import stateReducer from "./state-reducer";
 let store = createStore(stateReducer);
 
 
-export type StoreType = typeof store;
+export declare type StoreType = typeof store;
 
 
 export default store 

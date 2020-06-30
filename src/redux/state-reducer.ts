@@ -31,6 +31,7 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
           strokeColor: "#000000",
           width: width,
           height: height,
+          ref: null,
           id: newState.shapes.length
         }
       ]);
@@ -44,10 +45,10 @@ const stateReducer = (state = initialState, action: ActionTypes): StateType => {
     case 'SET_SELECTION':
       newState.selectedShapeId = action.data.shapeId;
       if (newState.selectedShapeId !== null) {
-        let node: HTMLElement | null = document.getElementById("svg" + action.data.shapeId);
-        if (node !== null && node.parentNode !== null) {
-          let parent = node.parentNode;
-          let shape = parent.removeChild(node);
+        let currShape = action.data.ref.current;
+        if (currShape !== null && currShape.parentNode !== null) {
+          let parent = currShape.parentNode;
+          let shape = parent.removeChild(currShape);
           parent.append(shape);
         }
       }
@@ -75,7 +76,7 @@ export type ActionTypes = ReturnType<PropertiesType<typeof actions>>;
 export type PropertiesType<T> = T extends { [key: string]: infer U} ? U: never;
 
 export const actions = {
-  addShapeActionCreator : (type: ShapeType) => {
+  addShape : (type: ShapeType) => {
     return {
       type: 'ADD_SHAPE',
       data: {
@@ -83,20 +84,21 @@ export const actions = {
       }
     } as const
   },
-  removeShapeActionCreator : () => {
+  removeShape : () => {
     return {
       type: 'REMOVE_SHAPE'
     } as const
   }, 
-  setSelectionActionCreator : (shapeId: number | null) => {
+  setSelection : (shapeId: number | null, ref: any) => {
     return {
       type: 'SET_SELECTION',
       data: {
-        shapeId: shapeId
+        shapeId: shapeId,
+        ref: ref
       }
     } as const
   },
-  setColorActionCreator : (newFillColor: string, newStrokeColor: string) => {
+  setColor : (newFillColor: string, newStrokeColor: string) => {
     return {
       type: 'SET_COLOR',
       data: {
@@ -105,7 +107,7 @@ export const actions = {
       }
     } as const
   },
-  setPositionActionCreator: (shapeIndex: number, shapeX: string, shapeY: string) => {
+  setPosition: (shapeIndex: number, shapeX: string, shapeY: string) => {
     return {
       type: 'SET_POSITION',
       data: {

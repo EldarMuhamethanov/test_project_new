@@ -10,15 +10,20 @@ const WorkSpace = (): JSX.Element => {
   
   const store: Readonly<StoreType> = useContext(StoreContext);
 
+  const {
+    shapes,
+    selectedShapeId
+  } = store.getState();
+
   const clickOnScreen = (e: React.MouseEvent): void => {
     if (!e.defaultPrevented) {
-      store.dispatch(actions.setSelectionActionCreator(null));
+      store.dispatch(actions.setSelection(null, null));
     }
   }
 
   const deleteShape = (e: KeyboardEvent): void => {
-    if (e.keyCode === 46 && store.getState().selectedShapeId !== null) {
-      store.dispatch(actions.removeShapeActionCreator())
+    if (e.keyCode === 46 && selectedShapeId !== null) {
+      store.dispatch(actions.removeShape())
     }
   }
   
@@ -30,7 +35,7 @@ const WorkSpace = (): JSX.Element => {
   })
   
   const renderShapes = (): Array<JSX.Element> => { 
-    const shapesJSX: Array<JSX.Element> = store.getState().shapes.map((row: ShapesType, index: number): JSX.Element => {
+    const shapesJSX: Array<JSX.Element> = shapes.map((row: ShapesType, index: number): JSX.Element => {
       return <OneShape index={index} />
     })
     return shapesJSX;
